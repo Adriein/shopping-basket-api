@@ -1,0 +1,33 @@
+{
+  "name": "pwa-shopping-basket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"tsc && node ./dist/index.js\" \"npm start --prefix client\"",
+    "server": "concurrently \"tsc -w\" \"nodemon ./dist/index.js\"",
+    "build": "tsc",
+    "start": "node ./dist/index.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "postinstall": "npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.2",
+    "@types/mongoose": "^5.7.21",
+    "@types/node": "^12.12.14",
+    "body-parser": "^1.19.0",
+    "chalk": "^3.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.17",
+    "reflect-metadata": "^0.1.13",
+    "typescript": "^3.9.3"
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.2",
+    "nodemon": "^2.0.1"
+  }
+}
