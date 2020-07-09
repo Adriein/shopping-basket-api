@@ -26,6 +26,11 @@ const init = async () => {
   );
 
   app.use(bodyParser.json());
+  app.get('/static', (req, res) => {
+    res.sendFile(
+      path.resolve(__dirname, '..','src','static', 'logo.png')
+    );
+  })
 
   if (process.env.NODE_ENV === 'pro') {
     app.use(express.static('client/build'));
