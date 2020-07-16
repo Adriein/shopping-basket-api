@@ -42,3 +42,13 @@ self.addEventListener('activate', (event) => {
             
     )
 });
+
+self.addEventListener('push', e => {
+    const data = e.data.json();
+    console.log(data)
+    console.log('Notification Recived');
+    self.registration.showNotification(data.title, {
+        body: data.message,
+        icon: './android-chrome-192x192.png'
+    });
+});

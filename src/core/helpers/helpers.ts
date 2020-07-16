@@ -35,3 +35,5 @@ export const maskFields = (object: any, array: string[]): Object => {
   return object;
 };
 
+export const isEqual = (a: any, b: any) =>
+  a.length === b.length && a.every((v: any, i: any) => JSON.stringify(v) === JSON.stringify(b[i]));

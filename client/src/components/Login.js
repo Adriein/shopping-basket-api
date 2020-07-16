@@ -20,6 +20,22 @@ import Box from '@material-ui/core/Box';
 
 import Copyright from './Copyright';
 
+const PUBLIC_VAPID_KEY =
+  'BAgfqXQf_bBXiPL7azqPUE7Qaaw2CZrLWpny6tTTVKQsMKZuIt7nJTQnMe4-wv0fem6OGZdhU7aXN4D3aws3dEU';
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -56,23 +72,35 @@ export default function Login(props) {
   });
 
   if (getToken()) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/groups" />;
   }
-
+  //console.log(Notification.requestPermission());
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('api/auth/signin', value);
-      dispatch({
-        type: 'LOGIN',
-        response,
+    const serviceWorker = await navigator.serviceWorker.ready;
+    if (
+      Notification.permission === 'granted' ||
+      (await Notification.requestPermission()) === 'granted'
+    ) {
+      const registration = await serviceWorker.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY),
       });
-      reset();
-    } catch (error) {
-      dispatch({
-        type: 'LOGIN_ERROR',
-        error: error.response.data.errors,
-      });
+      try {
+        dispatch({
+          type: 'LOGIN',
+          payload: await axios.post('api/auth/signin', {
+            ...value,
+            registration,
+          }),
+        });
+        reset();
+      } catch (error) {
+        dispatch({
+          type: 'LOGIN_ERROR',
+          error: error.response.data.errors,
+        });
+      }
     }
   };
 
@@ -80,12 +108,12 @@ export default function Login(props) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        {/* <Avatar className={classes.avatar}>
-          <span role="img" aria-label="icon bread">
-            🍞
-          </span> 
-        </Avatar> */}
-        <Avatar variant="square" className={classes.avatar} alt="Remy Sharp" src="/static" />
+        <Avatar
+          variant="square"
+          className={classes.avatar}
+          alt="Remy Sharp"
+          src="/api/static/1"
+        />
         <Typography component="h1" variant="h5">
           Iniciar Sesión
         </Typography>

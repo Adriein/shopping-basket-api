@@ -1,9 +1,9 @@
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN':
+    case 'CREATE_GROUP':
       return {
-        username: action.payload.data[0].username,
-        errormsg: undefined,
+        groups: [...state.groups, action.payload],
+        basket: [...state.basket],
       };
     default:
       return state;
