@@ -36,7 +36,7 @@ const init = async () => {
   app.use(
     cookieSession({
       signed: false,
-      secure: false,
+      secure: true,
       // maxAge: 900000,
       httpOnly: false,
     })
