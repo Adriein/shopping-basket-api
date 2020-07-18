@@ -51,7 +51,7 @@ const init = async () => {
 
   if (process.env.NODE_ENV === 'pro') {
     app.use(express.static('client/build'));
-    app.use(sslRedirect());
+    app.use(sslRedirect(['pro']));
 
     app.get('*', (req, res) => {
       res.sendFile(
