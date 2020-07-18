@@ -69,38 +69,38 @@ router.post(
   '/signin',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // const signin = new SignInUseCase(userRepository);
-      // const subscription = new RegisterPushSubscriptionUseCase(pushRepository);
+      const signin = new SignInUseCase(userRepository);
+      const subscription = new RegisterPushSubscriptionUseCase(pushRepository);
 
-      // const { username, password, registration } = req.body;
+      const { username, password, registration } = req.body;
 
-      // const credentials = {
-      //   username,
-      //   password,
-      // };
+      const credentials = {
+        username,
+        password,
+      };
 
-      // const [user] = (await signin.execute(credentials)).data as User[];
+      const [user] = (await signin.execute(credentials)).data as User[];
 
-      // subscription.execute(user.id!, registration);
+      subscription.execute(user.id!, registration);
 
-      // // Generate JWT
-      // const userJwt = jwt.sign(
-      //   {
-      //     id: user.id,
-      //     username,
-      //   },
-      //   process.env.JWT_KEY!
-      // );
+      // Generate JWT
+      const userJwt = jwt.sign(
+        {
+          id: user.id,
+          username,
+        },
+        process.env.JWT_KEY!
+      );
 
-      // // Store it on session object
-      // req.session = {
-      //   jwt: userJwt,
-      // };
+      // Store it on session object
+      req.session = {
+        jwt: userJwt,
+      };
 
-      // //Mask dangerous fields
-      // const securedUser = maskFields(user, ['password']);
+      //Mask dangerous fields
+      const securedUser = maskFields(user, ['password']);
 
-      res.status(200).send([]);
+      res.status(200).send([securedUser]);
     } catch (error) {
       next(error);
     }

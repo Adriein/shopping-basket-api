@@ -45,11 +45,6 @@ const init = async () => {
   app.use('/api/auth', auth);
   app.use('/api', groups);
   app.use('/api', media);
-  app.use((req, res, next) => {
-    console.log('aqui')
-    console.log(`https://${req.header('host')}${req.url}`);
-    next();
-  });
   app.use(errorHandler);
  
 
