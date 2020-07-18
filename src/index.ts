@@ -36,15 +36,22 @@ const init = async () => {
   app.use(
     cookieSession({
       signed: false,
-      secure: true,
+      secure: false,
       // maxAge: 900000,
       httpOnly: false,
     })
   );
+  
   app.use('/api/auth', auth);
   app.use('/api', groups);
   app.use('/api', media);
+  app.use((req, res, next) => {
+    console.log('aqui')
+    console.log(`https://${req.header('host')}${req.url}`);
+    next();
+  });
   app.use(errorHandler);
+ 
 
   if (process.env.NODE_ENV === 'pro') {
     app.use((req, res, next) => {
