@@ -17,6 +17,6 @@ export const errorHandler = (
 
   console.log(chalk.red.bold(err));
   res.status(400).send({
-    errors: [{ message: JSON.stringify(err) }],
+    errors: [{ message: 'Something went wrong' }],
   });
 };

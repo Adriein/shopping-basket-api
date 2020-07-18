@@ -8,8 +8,6 @@ import cookieSession from 'cookie-session';
 import { auth, media, groups } from './routes';
 import { errorHandler } from './routes/middlewares';
 
-const sslRedirect = require('heroku-ssl-redirect');
-
 const init = async () => {
   console.log(chalk.blue('Starting up...'));
   try {
@@ -49,7 +47,11 @@ const init = async () => {
   app.use(errorHandler);
 
   if (process.env.NODE_ENV === 'pro') {
-    app.use(sslRedirect(['pro']));
+    app.use((req, res, next) => {
+      if (req.header('x-forwarded-proto') !== 'https')
+        res.redirect(`https://${req.header('host')}${req.url}`);
+      else next();
+    });
     app.use(express.static('client/build'));
 
     app.get('*', (req, res) => {
