@@ -8,7 +8,7 @@ import cookieSession from 'cookie-session';
 import { auth, media, groups } from './routes';
 import { errorHandler } from './routes/middlewares';
 
-const sslRedirect = require('heroku-ssl-redirect') ;
+const sslRedirect = require('heroku-ssl-redirect');
 
 const init = async () => {
   console.log(chalk.blue('Starting up...'));
@@ -45,15 +45,13 @@ const init = async () => {
   );
 
   app.use('/api/auth', auth);
-  app.use('/api', groups)
-  app.use('/api', media)
+  app.use('/api', groups);
+  app.use('/api', media);
   app.use(errorHandler);
-  app.use(sslRedirect());
 
- 
-  
   if (process.env.NODE_ENV === 'pro') {
     app.use(express.static('client/build'));
+    app.use(sslRedirect());
 
     app.get('*', (req, res) => {
       res.sendFile(
