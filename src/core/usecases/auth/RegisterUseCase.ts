@@ -11,6 +11,7 @@ export class RegisterUseCase implements UseCase<User> {
 
       //Check if the user already exists
       const userOnDB = await this.repository.findOne(username!);
+      
       if (!isEmpty(userOnDB))
         throw new AlreadyExists('User already exists in DB');
 
