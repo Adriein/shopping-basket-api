@@ -1,3 +1,3 @@
 export * from './UserSchema';
 export * from './PushNotificationSubscriptionSchema';
-export * from './FamilyUnitSchema';
+export * from './GroupSchema';

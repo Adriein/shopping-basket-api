@@ -7,6 +7,7 @@ export const DispatchContext = createContext();
 const defaultState = {
   groups: [],
   basket: [],
+  error: undefined,
 };
 export function GeneralProvider(props) {
   const [state, dispatch] = useReducer(generalReducer, defaultState);

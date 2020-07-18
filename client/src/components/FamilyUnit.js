@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -16,6 +16,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 
 import Navigation from './Navigation';
+import SelectableUserListDialog from './SelectableUserListDialog';
 
 import { GeneralContext } from '../context/GeneralContext';
 import { DispatchContext } from '../context/GeneralContext';
@@ -51,22 +52,57 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     marginTop: 'auto',
   },
+  error: {
+    marginTop: theme.spacing(5),
+  },
 }));
-
-const familyUnits = [{ users: ['Juan', 'Maria', 'Manuel'] }];
 
 export default function FamilyUnit() {
   const classes = useStyles();
   const dispatch = useContext(DispatchContext);
   const state = useContext(GeneralContext);
+  const [open, setOpen] = useState(false);
+  const [checked, setChecked] = useState([]);
 
-  const createGroup = (e) => {
-    dispatch({
-      type: 'CREATE_GROUP',
-      payload: axios.post('/api/group', {users: [{username: 'Adria Claret', id: '5f0839f122c1cd30289c45c8'}]})
-    })
+  const addGroup = async () => {
+    setOpen(true);
   };
 
+  const createGroup = async () => {
+    try {
+      dispatch({
+        type: 'CREATE_GROUP',
+        payload: await axios.post('/api/group', {
+          users: [...checked],
+        }),
+      });
+      setOpen(false);
+      setChecked([]);
+    } catch (error) {
+      dispatch({
+        type: 'ERROR',
+        payload: error.response.data.errors,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        dispatch({
+          type: 'FETCH_GROUPS',
+          payload: await axios.get('/api/groups'),
+        });
+      } catch (error) {
+        dispatch({
+          type: 'ERROR',
+          payload: error.response.data.errors,
+        });
+      }
+    };
+
+    fetchGroups();
+  }, []);
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -95,49 +131,79 @@ export default function FamilyUnit() {
         </Toolbar>
       </AppBar>
       <Container maxWidth="md" component="main" className={classes.container}>
-        <Grid container spacing={2} direction="column">
+        <Grid
+          container
+          spacing={2}
+          direction="column"
+          justify="center"
+          alignItems="center"
+        >
           <Grid container direction="row" justify="center" alignItems="center">
             <Grid item>
               <Button
                 startIcon={<AddIcon />}
                 variant="outlined"
-                onClick={createGroup}
+                onClick={addGroup}
               >
                 Añadir grupo
               </Button>
             </Grid>
           </Grid>
-          {familyUnits.map((unit, index) => {
-            return (
-              <Grid item key={index}>
-                <Card>
-                  <Grid container direction="row">
-                    <Grid item xs={4}>
-                      <CardMedia
-                        component="img"
-                        alt="Family"
-                        src="api/static/2"
-                        title="Family"
-                        className={classes.cover}
-                      />
+          {state.error ? (
+            <Grid item>
+              <Typography
+                variant="h6"
+                color="primary"
+                noWrap
+                className={classes.error}
+              >
+                Este grupo ya existe
+              </Typography>
+            </Grid>
+          ) : (
+            state.groups.map((unit) => {
+              return (
+                <Grid item key={unit.id}>
+                  <Card>
+                    <Grid container direction="row">
+                      <Grid item xs={4}>
+                        <CardMedia
+                          component="img"
+                          alt="Family"
+                          src="api/static/2"
+                          title="Family"
+                          className={classes.cover}
+                        />
+                      </Grid>
+                      <Grid item xs={8}>
+                        <CardContent>
+                          {unit.users &&
+                            unit.users.map((user, index) => {
+                              return (
+                                <Typography variant="subtitle1" key={index}>
+                                  {user.username}
+                                </Typography>
+                              );
+                            })}
+                        </CardContent>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={8}>
-                      <CardContent>
-                        {unit.users.map((user, index) => {
-                          return (
-                            <Typography variant="subtitle1" key={index}>
-                              {user}
-                            </Typography>
-                          );
-                        })}
-                      </CardContent>
-                    </Grid>
-                  </Grid>
-                </Card>
-              </Grid>
-            );
-          })}
+                  </Card>
+                </Grid>
+              );
+            })
+          )}
         </Grid>
+        <SelectableUserListDialog
+          checked={checked}
+          setChecked={setChecked}
+          open={open}
+          createGroup={createGroup}
+          handleClose={(e) => {
+            setOpen(false);
+            setChecked([]);
+          }}
+        />
       </Container>
       <footer className={classes.footer}>
         <Box mt={8}>

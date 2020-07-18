@@ -2,26 +2,31 @@ import express, { Router } from 'express';
 import {
   PushNotificationSubscriptionRepository,
   UserRepository,
-  FamilyUnitRepository,
+  GroupRepository,
 } from '../infrastructure/repository';
-import { RegisterFamilyUnitUseCase } from '../core/usecases';
+import {
+  CreateGroupUnitUseCase,
+  GetAllGroupsUseCase,
+  GetAllUsersUseCase,
+} from '../core/usecases';
 import { PushNotificationService } from '../infrastructure/services/PushNotificationService';
+import { requireAuth, currentUser } from './middlewares';
 
 const router: Router = express.Router();
 const userRepo = new UserRepository();
-const familyUnitRepo = new FamilyUnitRepository();
+const familyUnitRepo = new GroupRepository();
 const pushNotificationSubscriptionRepo = new PushNotificationSubscriptionRepository();
 const pushNotificationService = new PushNotificationService();
 
-router.post('/group', async (req, res, next) => {
+router.post('/group', requireAuth, currentUser, async (req, res, next) => {
   try {
-    const usecase = new RegisterFamilyUnitUseCase(
+    const usecase = new CreateGroupUnitUseCase(
       familyUnitRepo,
       userRepo,
       pushNotificationSubscriptionRepo,
       pushNotificationService
     );
-
+    req.body.owner = req.currentUser!.id;
     const familyUnit = await usecase.execute(req.body);
     res.send([familyUnit]);
   } catch (error) {
@@ -29,6 +34,24 @@ router.post('/group', async (req, res, next) => {
   }
 });
 
-router.get('/groups', async (req, res) => {});
+router.get('/groups', requireAuth, async (req, res, next) => {
+  try {
+    const usecase = new GetAllGroupsUseCase(familyUnitRepo);
+
+    res.send((await usecase.execute()).data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/users', requireAuth, async (req, res, next) => {
+  try {
+    const usecase = new GetAllUsersUseCase(userRepo);
+
+    res.send((await usecase.execute()).data);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export { router as groups };

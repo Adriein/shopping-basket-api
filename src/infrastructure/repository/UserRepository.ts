@@ -1,5 +1,5 @@
 import { User, Repository } from '../../core/entities';
-import { UserModel } from '../data/schemas';
+import { UserModel, UserDoc } from '../data/schemas';
 import { UserMapper } from '../data/mappers/UserMapper';
 
 export class UserRepository implements Repository<User> {
@@ -10,9 +10,9 @@ export class UserRepository implements Repository<User> {
   }
 
   async findMany(searchObj: any): Promise<User[]> {
-    const [user] = await UserModel.find(searchObj).exec();
-    if (!user) return [{}];
-    return [this.mapper.userSchemaToDomainUser(user)];
+    const user: UserDoc[] = await UserModel.find(searchObj).exec();
+    if (user.length === 0) return [{}];
+    return this.mapper.usersSchemaToDomainUsers(user);
   }
 
   async findOne(id: string): Promise<User> {

@@ -2,7 +2,7 @@ import {
   Result,
   Repository,
   UseCase,
-  FamilyUnit,
+  Group,
   User,
   Service,
   PushNotificationSubscription,
@@ -11,9 +11,9 @@ import { BadRequest, CustomError, UnExpectedError } from '../../errors';
 import { SendPushNotifiactionUseCase } from '../SendPushNotificationUseCase';
 import { isEqual } from '../../helpers';
 
-export class RegisterFamilyUnitUseCase implements UseCase<FamilyUnit> {
+export class CreateGroupUnitUseCase implements UseCase<Group> {
   constructor(
-    private repository: Repository<FamilyUnit>,
+    private repository: Repository<Group>,
     private usersRepository: Repository<User>,
     private pushNotificationSubscriptionRepository: Repository<
       PushNotificationSubscription
@@ -21,7 +21,7 @@ export class RegisterFamilyUnitUseCase implements UseCase<FamilyUnit> {
     private service: Service
   ) {}
 
-  async execute(familyUnit: FamilyUnit): Promise<Result<FamilyUnit>> {
+  async execute(familyUnit: Group): Promise<Result<Group>> {
     try {
       //Check if the family unit contains valid users (atleast always come with one user, the creator of the family unit)
       familyUnit.users.forEach(async (user) => {
@@ -37,11 +37,10 @@ export class RegisterFamilyUnitUseCase implements UseCase<FamilyUnit> {
       });
 
       //Create the family unit
-      const createdFamilyUnit = await this.repository.save(familyUnit);
+      const createdGroup = await this.repository.save(familyUnit);
 
       //Notify other users related to family unit (the first user of the array is always the creator so it hasn't to be notified)
       familyUnit.users.forEach(async (user, index) => {
-        if (index === 0) return;
         new SendPushNotifiactionUseCase(
           this.service,
           this.pushNotificationSubscriptionRepository
@@ -51,7 +50,7 @@ export class RegisterFamilyUnitUseCase implements UseCase<FamilyUnit> {
         });
       });
 
-      return new Result<FamilyUnit>([createdFamilyUnit]);
+      return new Result<Group>([createdGroup]);
     } catch (error) {
       if (error instanceof CustomError) throw error;
       throw new UnExpectedError(error.message);

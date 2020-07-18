@@ -1,13 +1,18 @@
 import mongoose, { Schema } from 'mongoose';
 
-export interface FamilyUnitDoc extends mongoose.Document {
+export interface GroupDoc extends mongoose.Document {
   _id: string;
+  owner: string;
   users: [];
   creationDate: Date;
 }
 
 const familyUnitSchema = new Schema(
   {
+    owner: {
+      type: String,
+      required: true,
+    },
     users: {
       type: Array,
       required: true,
@@ -16,7 +21,4 @@ const familyUnitSchema = new Schema(
   { timestamps: true }
 );
 
-export const FamilyUnitModel = mongoose.model<FamilyUnitDoc>(
-  'FamilyUnit',
-  familyUnitSchema
-);
+export const GroupModel = mongoose.model<GroupDoc>('Group', familyUnitSchema);

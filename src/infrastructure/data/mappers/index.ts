@@ -1,2 +1,2 @@
 export * from './UserMapper';
-export * from './FamilyUnitMapper';
+export * from './GroupMapper';
