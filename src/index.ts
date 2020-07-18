@@ -8,8 +8,6 @@ import cookieSession from 'cookie-session';
 import { auth, media, groups } from './routes';
 import { errorHandler } from './routes/middlewares';
 
-let pushSubscripton;
-
 const init = async () => {
   console.log(chalk.blue('Starting up...'));
   try {
