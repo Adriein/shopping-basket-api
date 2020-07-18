@@ -43,13 +43,13 @@ const init = async () => {
       httpOnly: false,
     })
   );
-  app.use(sslRedirect(['pro']));
   app.use('/api/auth', auth);
   app.use('/api', groups);
   app.use('/api', media);
   app.use(errorHandler);
 
   if (process.env.NODE_ENV === 'pro') {
+    app.use(sslRedirect(['pro']));
     app.use(express.static('client/build'));
 
     app.get('*', (req, res) => {
