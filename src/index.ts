@@ -43,7 +43,7 @@ const init = async () => {
       httpOnly: false,
     })
   );
-
+  app.use(sslRedirect(['pro']));
   app.use('/api/auth', auth);
   app.use('/api', groups);
   app.use('/api', media);
@@ -51,7 +51,6 @@ const init = async () => {
 
   if (process.env.NODE_ENV === 'pro') {
     app.use(express.static('client/build'));
-    app.use(sslRedirect(['pro']));
 
     app.get('*', (req, res) => {
       res.sendFile(
