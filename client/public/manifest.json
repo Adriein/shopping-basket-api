@@ -1,6 +1,6 @@
 {
-  "short_name": "SList",
-  "name": "ShopList",
+  "short_name": "ShoppingList",
+  "name": "ShoppingList",
   "icons": [
     {
       "src": "favicon.ico",

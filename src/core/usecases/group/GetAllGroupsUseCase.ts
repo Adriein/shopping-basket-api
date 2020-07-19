@@ -1,12 +1,24 @@
-import { Result, Repository, UseCase, Group } from '../../entities';
+import { Result, Repository, UseCase, Group, User } from '../../entities';
 import { CustomError, UnExpectedError } from '../../errors';
 
 export class GetAllGroupsUseCase implements UseCase<Group> {
   constructor(private repository: Repository<Group>) {}
 
-  async execute(): Promise<Result<Group>> {
+  async execute(currentUser: User): Promise<Result<Group>> {
     try {
-      return new Result<Group>(await this.repository.findMany({}));
+      //We get all groups
+      const groups = await this.repository.findMany({});
+
+      //Filter all groups to remove those where the user who is making the request is not into
+      const filteredGroups = groups.filter((group) => {
+        if (
+          group.owner === currentUser.id &&
+          group.users.some((user) => user === currentUser.id)
+        )
+          return group;
+      });
+
+      return new Result<Group>(filteredGroups);
     } catch (error) {
       if (error instanceof CustomError) throw error;
       throw new UnExpectedError(error.message);

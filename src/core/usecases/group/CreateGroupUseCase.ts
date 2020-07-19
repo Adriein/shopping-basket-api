@@ -39,7 +39,7 @@ export class CreateGroupUnitUseCase implements UseCase<Group> {
       //Create the family unit
       const createdGroup = await this.repository.save(familyUnit);
 
-      //Notify other users related to family unit (the first user of the array is always the creator so it hasn't to be notified)
+      //Notify other users related to family unit
       familyUnit.users.forEach(async (user, index) => {
         new SendPushNotifiactionUseCase(
           this.service,

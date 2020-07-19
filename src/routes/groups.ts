@@ -34,11 +34,11 @@ router.post('/group', requireAuth, currentUser, async (req, res, next) => {
   }
 });
 
-router.get('/groups', requireAuth, async (req, res, next) => {
+router.get('/groups', requireAuth, currentUser, async (req, res, next) => {
   try {
     const usecase = new GetAllGroupsUseCase(familyUnitRepo);
 
-    res.send((await usecase.execute()).data);
+    res.send((await usecase.execute(req.currentUser!)).data);
   } catch (error) {
     next(error);
   }
