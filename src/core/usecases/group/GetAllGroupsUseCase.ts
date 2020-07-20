@@ -12,8 +12,8 @@ export class GetAllGroupsUseCase implements UseCase<Group> {
       //Filter all groups to remove those where the user who is making the request is not into
       const filteredGroups = groups.filter((group) => {
         if (
-          group.owner === currentUser.id &&
-          group.users.some((user) => user === currentUser.id)
+          group.owner === currentUser.id ||
+          group.users.some((user) => user.id === currentUser.id)
         )
           return group;
       });

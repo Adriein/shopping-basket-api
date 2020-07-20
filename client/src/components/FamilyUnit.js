@@ -103,6 +103,8 @@ export default function FamilyUnit() {
 
     fetchGroups();
   }, []);
+
+  console.log(state.groups)
   return (
     <div className={classes.root}>
       <CssBaseline />

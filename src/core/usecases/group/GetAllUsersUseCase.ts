@@ -4,9 +4,12 @@ import { CustomError, UnExpectedError } from '../../errors';
 export class GetAllUsersUseCase implements UseCase<User> {
   constructor(private repository: Repository<User>) {}
 
-  async execute(): Promise<Result<User>> {
+  async execute(currentUser: User): Promise<Result<User>> {
     try {
-      return new Result<User>(await this.repository.findMany({}));
+      const allUsers = await this.repository.findMany({});
+      return new Result<User>(
+        allUsers.filter((user) => user.id !== currentUser.id)
+      );
     } catch (error) {
       if (error instanceof CustomError) throw error;
       throw new UnExpectedError(error.message);

@@ -27,8 +27,8 @@ router.post('/group', requireAuth, currentUser, async (req, res, next) => {
       pushNotificationService
     );
     req.body.owner = req.currentUser!.id;
-    const familyUnit = await usecase.execute(req.body);
-    res.send([familyUnit]);
+    const result = await usecase.execute(req.body);
+    res.send(result.data);
   } catch (error) {
     next(error);
   }
@@ -44,11 +44,11 @@ router.get('/groups', requireAuth, currentUser, async (req, res, next) => {
   }
 });
 
-router.get('/users', requireAuth, async (req, res, next) => {
+router.get('/users', requireAuth, currentUser, async (req, res, next) => {
   try {
     const usecase = new GetAllUsersUseCase(userRepo);
 
-    res.send((await usecase.execute()).data);
+    res.send((await usecase.execute(req.currentUser!)).data);
   } catch (error) {
     next(error);
   }

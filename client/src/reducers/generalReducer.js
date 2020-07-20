@@ -2,7 +2,7 @@ const reducer = (state, action) => {
   switch (action.type) {
     case 'CREATE_GROUP':
       return {
-        groups: [...state.groups, action.payload.data],
+        groups: [...state.groups, ...action.payload.data],
         basket: [...state.basket],
         error: undefined,
       };
