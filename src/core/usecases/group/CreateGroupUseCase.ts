@@ -33,15 +33,16 @@ export class CreateGroupUnitUseCase implements UseCase<Group> {
 
       //Check if the family unit already exists
       (await this.repository.findMany({})).forEach((group) => {
-        if (isEqual(familyUnit.users, group.users))
+        const usersIds = group.users.map((user) => user.id);
+        if (isEqual(familyUnit.users, usersIds)) {
           throw new BadRequest('This group already exists');
+        }
       });
 
       //Create the family unit
       const createdGroup = await this.repository.save(familyUnit);
 
       //Notify other users related to family unit
-
       const sendSubscription = new SendPushNotifiactionUseCase(
         this.service,
         this.pushNotificationSubscriptionRepository

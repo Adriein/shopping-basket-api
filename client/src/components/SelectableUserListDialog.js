@@ -30,7 +30,7 @@ export default function SelectableUserListDialog(props) {
 
     fetchUsers();
   }, []);
-
+  console.log(users)
   const toggleChecked = (id) => (e) => {
     const index = checked.indexOf(id);
     const newChecked = [...checked];
