@@ -17,6 +17,7 @@ export class PushNotificationService implements Service {
   ): Promise<any> {
     try {
       await webpush.sendNotification(pushSubscription, JSON.stringify(payload));
+      console.log('Notificacion mandada')
     } catch (error) {
       console.log(error, 'error en la subscription');
       if (error instanceof CustomError) throw error;

@@ -83,6 +83,8 @@ export default function FamilyUnit() {
         type: 'ERROR',
         payload: error.response.data.errors,
       });
+      setOpen(false);
+      setChecked([]);
     }
   };
 
@@ -104,7 +106,6 @@ export default function FamilyUnit() {
     fetchGroups();
   }, []);
 
-  console.log(state.groups)
   return (
     <div className={classes.root}>
       <CssBaseline />
