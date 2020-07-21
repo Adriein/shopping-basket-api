@@ -13,7 +13,9 @@ export class GetAllGroupsUseCase implements UseCase<Group> {
       const filteredGroups = groups.filter((group) => {
         if (
           group.owner === currentUser.id ||
-          group.users.some((user) => user.id === currentUser.id)
+          group.users.some((user) => {
+            return user.id!.toString() === currentUser.id!.toString();
+          })
         )
           return group;
       });
