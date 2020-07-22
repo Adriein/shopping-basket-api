@@ -47,7 +47,7 @@ export class CreateGroupUnitUseCase implements UseCase<Group> {
         this.service,
         this.pushNotificationSubscriptionRepository
       );
-
+      users.push(familyUnit.owner);
       await sendSubscription.execute(users, {
         title: 'Shopping List',
         message: `Te han añadido a una unidad familiar`,

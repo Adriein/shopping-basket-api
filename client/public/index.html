@@ -52,14 +52,6 @@
       } else {
         console.log('Service Worker is not supported by browser.');
       }
-      if ('Notification' in window) {
-      navigator.serviceWorker.ready.then(registration => {
-        registration.showNotification('Vibration Sample', {
-          body: 'Buzz! Buzz!',
-          tag: 'vibration-sample'
-        });
-      });
-    }
     </script>
   </body>
 </html>

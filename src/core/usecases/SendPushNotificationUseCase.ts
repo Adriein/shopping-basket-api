@@ -24,14 +24,22 @@ export class SendPushNotifiactionUseCase implements UseCase<boolean> {
   ): Promise<Result<boolean>> {
     try {
       for (const user of users) {
-        const subscriptionOnDb = await this.pushNotificationSubscriptionRepository.findOne(
-          user
-        );
+        try {
+          const subscriptionOnDb = await this.pushNotificationSubscriptionRepository.findOne(
+            user
+          );
 
-        if (isEmpty(subscriptionOnDb))
-          throw new BadRequest('The subscription not exists');
+          if (isEmpty(subscriptionOnDb))
+            throw new BadRequest('The subscription not exists');
 
-        this.service.send(subscriptionOnDb.pushSubscription, pushNotification);
+          this.service.send(
+            subscriptionOnDb.pushSubscription,
+            pushNotification
+          );
+        } catch (error) {
+          if (error instanceof BadRequest) continue;
+          throw error;
+        }
       }
 
       return new Result([true]);
