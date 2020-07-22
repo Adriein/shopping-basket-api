@@ -50,5 +50,5 @@ self.addEventListener('push', (e) => {
     icon: './android-chrome-192x192.png',
   });
 
-  event.waitUntil(promiseChain);
+  e.waitUntil(promiseChain);
 });
