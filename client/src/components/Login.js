@@ -72,7 +72,7 @@ export default function Login(props) {
   });
 
   if (getToken()) {
-    return <Redirect to="/groups" />;
+    return <Redirect to="/basketlist" />;
   }
   //console.log(Notification.requestPermission());
   const handleSubmit = async (e) => {

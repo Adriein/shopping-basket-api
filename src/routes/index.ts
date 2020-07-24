@@ -1,3 +1,3 @@
 export * from './auth';
 export * from './media';
-export * from './groups';
+export * from './baskets';

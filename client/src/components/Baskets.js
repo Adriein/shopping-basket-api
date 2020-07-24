@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FamilyUnit() {
+export default function Baskets(props) {
   const classes = useStyles();
   const dispatch = useContext(DispatchContext);
   const state = useContext(GeneralContext);
@@ -72,7 +72,7 @@ export default function FamilyUnit() {
     try {
       dispatch({
         type: 'CREATE_GROUP',
-        payload: await axios.post('/api/group', {
+        payload: await axios.post('/api/basket', {
           users: [...checked],
         }),
       });
@@ -93,7 +93,7 @@ export default function FamilyUnit() {
       try {
         dispatch({
           type: 'FETCH_GROUPS',
-          payload: await axios.get('/api/groups'),
+          payload: await axios.get('/api/baskets'),
         });
       } catch (error) {
         dispatch({
@@ -105,6 +105,10 @@ export default function FamilyUnit() {
 
     fetchGroups();
   }, []);
+
+  const handleBasketClick = (e) => {
+    props.history.push('/basketid');
+  };
 
   return (
     <div className={classes.root}>
@@ -148,7 +152,7 @@ export default function FamilyUnit() {
                 variant="outlined"
                 onClick={addGroup}
               >
-                Añadir grupo
+                Añadir cesta
               </Button>
             </Grid>
           </Grid>
@@ -166,7 +170,7 @@ export default function FamilyUnit() {
           ) : (
             state.groups.map((unit) => {
               return (
-                <Grid item key={unit.id}>
+                <Grid item key={unit.id} onClick={handleBasketClick}>
                   <Card>
                     <Grid container direction="row">
                       <Grid item xs={4}>

@@ -1,6 +1,6 @@
 import { User } from './User';
 
-export interface Group {
+export interface Basket {
   id: string;
   owner: string;
   users: User[];

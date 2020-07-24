@@ -5,7 +5,8 @@ import { GeneralProvider } from '../context/GeneralContext';
 import { ProtectedRoute } from './ProtectedRoute';
 
 import Login from './Login';
-import FamilyUnit from './FamilyUnit';
+import Baskets from './Baskets';
+import Basket from './Basket';
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
       <AuthProvider>
         <Route path="/" exact component={Login} />
         <GeneralProvider>
-          <ProtectedRoute path="/groups" exact component={FamilyUnit} />
+          <ProtectedRoute path="/basketlist" exact component={Baskets} />
+          <ProtectedRoute path="/basketid" exact component={Basket} />
         </GeneralProvider>
       </AuthProvider>
     </BrowserRouter>

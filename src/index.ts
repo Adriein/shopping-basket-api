@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import chalk from 'chalk';
 import path from 'path';
 import cookieSession from 'cookie-session';
-import { auth, media, groups } from './routes';
+import { auth, media, baskets } from './routes';
 import { errorHandler } from './routes/middlewares';
 
 const init = async () => {
@@ -43,7 +43,7 @@ const init = async () => {
   );
   
   app.use('/api/auth', auth);
-  app.use('/api', groups);
+  app.use('/api', baskets);
   app.use('/api', media);
   app.use(errorHandler);
  

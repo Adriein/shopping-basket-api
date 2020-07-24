@@ -2,7 +2,7 @@ import {
   Result,
   Repository,
   UseCase,
-  Group,
+  Basket,
   User,
   Service,
   PushNotificationSubscription,
@@ -11,9 +11,9 @@ import { BadRequest, CustomError, UnExpectedError } from '../../errors';
 import { SendPushNotifiactionUseCase } from '../SendPushNotificationUseCase';
 import { isEqual } from '../../helpers';
 
-export class CreateGroupUnitUseCase implements UseCase<Group> {
+export class CreateBasketUseCase implements UseCase<Basket> {
   constructor(
-    private repository: Repository<Group>,
+    private repository: Repository<Basket>,
     private usersRepository: Repository<User>,
     private pushNotificationSubscriptionRepository: Repository<
       PushNotificationSubscription
@@ -21,39 +21,39 @@ export class CreateGroupUnitUseCase implements UseCase<Group> {
     private service: Service
   ) {}
 
-  async execute(familyUnit: any): Promise<Result<Group>> {
+  async execute(basket: any): Promise<Result<Basket>> {
     try {
-      const { users } = familyUnit;
-      //Check if the family unit contains valid users (atleast always come with one user, the creator of the family unit)
+      const { users } = basket;
+      //Check if the basket contains valid users (atleast always come with one user, the creator of the family unit)
       for (const user of users) {
         const userOnDb = await this.usersRepository.findOne(user.username!);
         if (!userOnDb)
           throw new BadRequest(`No user with username: ${user.username} found`);
       }
 
-      //Check if the family unit already exists
+      //Check if the basket already exists
       (await this.repository.findMany({})).forEach((group) => {
         const usersIds = group.users.map((user) => user.id);
-        if (isEqual(familyUnit.users, usersIds)) {
+        if (isEqual(basket.users, usersIds)) {
           throw new BadRequest('This group already exists');
         }
       });
 
-      //Create the family unit
-      const createdGroup = await this.repository.save(familyUnit);
+      //Create the basket
+      const createdBasket = await this.repository.save(basket);
 
       //Notify other users related to family unit
       const sendSubscription = new SendPushNotifiactionUseCase(
         this.service,
         this.pushNotificationSubscriptionRepository
       );
-      users.push(familyUnit.owner);
+      users.push(basket.owner);
       await sendSubscription.execute(users, {
         title: 'Shopping List',
         message: `Te han añadido a una unidad familiar`,
       });
 
-      return new Result<Group>([createdGroup]);
+      return new Result<Basket>([createdBasket]);
     } catch (error) {
       if (error instanceof CustomError) throw error;
       throw new UnExpectedError(error.message);

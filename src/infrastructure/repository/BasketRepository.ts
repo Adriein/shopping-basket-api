@@ -1,36 +1,36 @@
-import { Repository, Group } from '../../core/entities';
+import { Repository, Basket } from '../../core/entities';
 import { GroupModel } from '../data/schemas';
-import { GroupMapper } from '../data/mappers';
+import { BasketMapper } from '../data/mappers';
 
-export class GroupRepository implements Repository<Group> {
-  private mapper: GroupMapper;
+export class BasketRepository implements Repository<Basket> {
+  private mapper: BasketMapper;
 
   constructor() {
-    this.mapper = new GroupMapper();
+    this.mapper = new BasketMapper();
   }
 
-  async findMany(searchObj: any): Promise<Group[]> {
+  async findMany(searchObj: any): Promise<Basket[]> {
     const familyUnit = await GroupModel.find(searchObj).exec();
     if (familyUnit.length === 0) return [];
     return await this.mapper.groupsSchemasToDomainGroups(familyUnit);
   }
 
-  async findOne(id: string): Promise<Group> {
+  async findOne(id: string): Promise<Basket> {
     const response = await GroupModel.findOne({
       username: id,
     }).exec();
     if (response !== null)
       return await this.mapper.groupSchemaToDomainGroup(response);
-    return {} as Group;
+    return {} as Basket;
   }
 
-  async save(body: Group): Promise<Group> {
+  async save(body: Basket): Promise<Basket> {
     return await this.mapper.groupSchemaToDomainGroup(
       await new GroupModel(body).save()
     );
   }
 
-  async update(id: string, body: Group): Promise<Group> {
+  async update(id: string, body: Basket): Promise<Basket> {
     throw new Error();
   }
 

@@ -1,3 +1,3 @@
 export * from './UserRepository';
 export * from './PushNotificationSubscriptionRepository';
-export * from './GroupRepository';
+export * from './BasketRepository';

@@ -1,8 +1,8 @@
-import { Group, User, Repository } from '../../../core/entities';
+import { Basket, User, Repository } from '../../../core/entities';
 import { GroupDoc } from '../schemas';
 import { UserRepository } from '../../repository';
 
-export class GroupMapper {
+export class BasketMapper {
   private userRepository: Repository<User>;
   constructor() {
     this.userRepository = new UserRepository();
@@ -12,16 +12,16 @@ export class GroupMapper {
     owner,
     users,
     creationDate,
-  }: GroupDoc): Promise<Group> {
+  }: GroupDoc): Promise<Basket> {
     return {
       id: _id,
       users: await this.buildUsersArray(users),
       owner,
       creationDate,
-    } as Group;
+    } as Basket;
   }
 
-  async groupsSchemasToDomainGroups(groups: GroupDoc[]): Promise<Group[]> {
+  async groupsSchemasToDomainGroups(groups: GroupDoc[]): Promise<Basket[]> {
     return (await Promise.all(
       groups.map(async (group) => {
         return {
@@ -31,7 +31,7 @@ export class GroupMapper {
           creationDate: group.creationDate,
         };
       })
-    )) as Group[];
+    )) as Basket[];
   }
 
   async buildUsersArray(userIds: string[]): Promise<User[]> {

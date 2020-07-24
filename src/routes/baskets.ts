@@ -2,11 +2,11 @@ import express, { Router } from 'express';
 import {
   PushNotificationSubscriptionRepository,
   UserRepository,
-  GroupRepository,
+  BasketRepository,
 } from '../infrastructure/repository';
 import {
-  CreateGroupUnitUseCase,
-  GetAllGroupsUseCase,
+  CreateBasketUseCase,
+  GetAllRelatedBasketsUseCase,
   GetAllUsersUseCase,
 } from '../core/usecases';
 import { PushNotificationService } from '../infrastructure/services/PushNotificationService';
@@ -14,13 +14,13 @@ import { requireAuth, currentUser } from './middlewares';
 
 const router: Router = express.Router();
 const userRepo = new UserRepository();
-const familyUnitRepo = new GroupRepository();
+const familyUnitRepo = new BasketRepository();
 const pushNotificationSubscriptionRepo = new PushNotificationSubscriptionRepository();
 const pushNotificationService = new PushNotificationService();
 
-router.post('/group', requireAuth, currentUser, async (req, res, next) => {
+router.post('/basket', requireAuth, currentUser, async (req, res, next) => {
   try {
-    const usecase = new CreateGroupUnitUseCase(
+    const usecase = new CreateBasketUseCase(
       familyUnitRepo,
       userRepo,
       pushNotificationSubscriptionRepo,
@@ -34,9 +34,9 @@ router.post('/group', requireAuth, currentUser, async (req, res, next) => {
   }
 });
 
-router.get('/groups', requireAuth, currentUser, async (req, res, next) => {
+router.get('/baskets', requireAuth, currentUser, async (req, res, next) => {
   try {
-    const usecase = new GetAllGroupsUseCase(familyUnitRepo);
+    const usecase = new GetAllRelatedBasketsUseCase(familyUnitRepo);
 
     res.send((await usecase.execute(req.currentUser!)).data);
   } catch (error) {
@@ -54,4 +54,4 @@ router.get('/users', requireAuth, currentUser, async (req, res, next) => {
   }
 });
 
-export { router as groups };
+export { router as baskets };
