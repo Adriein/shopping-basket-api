@@ -1,22 +1,25 @@
 require('dotenv').config();
+import 'reflect-metadata';
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 import chalk from 'chalk';
 import path from 'path';
 import cookieSession from 'cookie-session';
-import { auth, media, baskets } from './routes';
 import { errorHandler } from './routes/middlewares';
+import { createConnection } from 'typeorm';
 
 const init = async () => {
   console.log(chalk.blue('Starting up...'));
   try {
-    await mongoose.connect(process.env.DATABASE_URL || '', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
+    await createConnection({
+      type: 'postgres',
+      host: process.env.DATABASE_HOST!,
+      port: parseInt(process.env.DATABASE_PORT!),
+      username: process.env.DATABASE_USER!,
+      password: process.env.DATABASE_PASSWORD!,
+      database: process.env.DATABASE_NAME!,
     });
-    console.log(chalk.green('Conected to MongoDB'));
+    console.log(chalk.green('Conected to PostgreSQL'));
   } catch (err) {
     console.error(err);
   }
@@ -41,12 +44,11 @@ const init = async () => {
       httpOnly: false,
     })
   );
-  
-  app.use('/api/auth', auth);
-  app.use('/api', baskets);
-  app.use('/api', media);
+
+  // app.use('/api/auth', auth);
+  // app.use('/api', baskets);
+  // app.use('/api', media);
   app.use(errorHandler);
- 
 
   if (process.env.NODE_ENV === 'pro') {
     app.use((req, res, next) => {
@@ -68,4 +70,20 @@ const init = async () => {
   });
 };
 
+const env = () => {
+  if (
+    !process.env.DATABASE_HOST ||
+    !process.env.DATABASE_PORT ||
+    !process.env.DATABASE_USER ||
+    !process.env.DATABASE_PASSWORD ||
+    !process.env.DATABASE_NAME
+  ) {
+    throw new Error('Some env variables are not setted');
+  }
+};
+
+//Check that all env variables are setted
+env();
+
+//Init the server
 init();
