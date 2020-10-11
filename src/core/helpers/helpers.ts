@@ -1,5 +1,7 @@
 import { scrypt, randomBytes } from 'crypto';
 import { promisify } from 'util';
+import shortId from 'shortid';
+import { v4 as uuidv4 } from 'uuid';
 
 const scryptAsync = promisify(scrypt);
 
@@ -7,7 +9,7 @@ export const isEmpty = (obj: Object) => {
   return Reflect.ownKeys(obj).length === 0 && obj.constructor === Object;
 };
 
-export const toHash = async (password: string) => {
+export const hash = async (password: string) => {
   const salt = randomBytes(8).toString('hex');
   const buf = (await scryptAsync(password, salt, 64)) as Buffer;
 
@@ -36,4 +38,9 @@ export const maskFields = (object: any, array: string[]): Object => {
 };
 
 export const isEqual = (a: any, b: any) =>
-  a.length === b.length && a.every((v: any, i: any) => JSON.stringify(v) === JSON.stringify(b[i]));
+  a.length === b.length &&
+  a.every((v: any, i: any) => JSON.stringify(v) === JSON.stringify(b[i]));
+
+export const generateShortId = (): string => shortId.generate();
+
+export const generateUuid = (): string => uuidv4();

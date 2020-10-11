@@ -7,6 +7,7 @@ import path from 'path';
 import cookieSession from 'cookie-session';
 import { errorHandler } from './routes/middlewares';
 import { createConnection } from 'typeorm';
+import { auth } from './routes';
 
 const init = async () => {
   console.log(chalk.blue('Starting up...'));
@@ -18,7 +19,10 @@ const init = async () => {
       username: process.env.DATABASE_USER!,
       password: process.env.DATABASE_PASSWORD!,
       database: process.env.DATABASE_NAME!,
+      entities: [`${__dirname}/infrastructure/data/DTO/**/*.js`],
+      synchronize: true
     });
+
     console.log(chalk.green('Conected to PostgreSQL'));
   } catch (err) {
     console.error(err);
@@ -44,8 +48,8 @@ const init = async () => {
       httpOnly: false,
     })
   );
-
-  // app.use('/api/auth', auth);
+    const { auth } = require('./routes/auth')
+  app.use('/api/auth', auth);
   // app.use('/api', baskets);
   // app.use('/api', media);
   app.use(errorHandler);

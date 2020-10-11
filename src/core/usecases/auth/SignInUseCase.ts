@@ -5,7 +5,10 @@ import { isEmpty, compare } from '../../helpers';
 export class SignInUseCase implements UseCase<User> {
   constructor(private repository: Repository<User>) {}
 
-  async execute(body: User): Promise<Response<User>> {
+  async execute(body: {
+    username: string;
+    password: string;
+  }): Promise<Response<User>> {
     try {
       const { username, password } = body;
 
