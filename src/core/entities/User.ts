@@ -1,6 +1,7 @@
 import { generateShortId, generateUuid } from '../helpers';
+import { IUser } from '../interfaces/IUser';
 
-export class User {
+export class User implements IUser{
   private _id: string;
   private _publicId: string;
   private _username: string;

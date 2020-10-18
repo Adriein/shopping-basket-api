@@ -1,14 +1,15 @@
-import { User, Response, Repository, UseCase } from '../../entities';
+import { Response } from '../../entities';
 import { NotAuthorizedError, CustomError, UnExpectedError } from '../../errors';
 import { isEmpty, compare } from '../../helpers';
+import { Repository, UseCase, IUser } from '../../interfaces';
 
-export class SignInUseCase implements UseCase<User> {
-  constructor(private repository: Repository<User>) {}
+export class SignInUseCase implements UseCase<IUser> {
+  constructor(private repository: Repository<IUser>) {}
 
   async execute(body: {
     username: string;
     password: string;
-  }): Promise<Response<User>> {
+  }): Promise<Response<IUser>> {
     try {
       const { username, password } = body;
 
@@ -21,7 +22,7 @@ export class SignInUseCase implements UseCase<User> {
       if (!(await compare(userOnDB.password!, password!)))
         throw new NotAuthorizedError();
 
-      return new Response<User>([userOnDB]);
+      return new Response<IUser>([userOnDB]);
     } catch (error) {
       if (error instanceof CustomError) throw error;
       throw new UnExpectedError(error.message);

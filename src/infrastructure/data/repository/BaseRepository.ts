@@ -1,6 +1,5 @@
-import { Repository, Mapper } from '../../../core/entities';
+import { Repository, Mapper } from '../../../core/interfaces';
 import { getConnection } from 'typeorm';
-import { User } from '../DTO/User.dto';
 
 export class BaseRepository<T> implements Repository<T> {
   private database = getConnection().manager;
@@ -17,7 +16,7 @@ export class BaseRepository<T> implements Repository<T> {
     return this.mapper.toDomainEntity(entities);
   }
   async save(body: T): Promise<T> {
-    const entity = await this.database.save(User, body);
+    const entity = await this.database.save(this.entity, body);
     const [domainEntity] = this.mapper.toDomainEntity([entity]);
 
     return domainEntity;
