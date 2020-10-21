@@ -7,8 +7,6 @@ import path from 'path';
 import cookieSession from 'cookie-session';
 import { errorHandler } from './routes/middlewares';
 import { createConnection } from 'typeorm';
-import { auth } from './routes';
-import { scrapping } from './routes/scrapping';
 
 const init = async () => {
   console.log(chalk.blue('Starting up...'));
@@ -49,11 +47,9 @@ const init = async () => {
       httpOnly: false,
     })
   );
-  const { auth } = require('./routes/auth');
-  const { scrapping } = require('./routes/scrapping');
-  app.use('/api/auth', auth);
-  app.use('/api', scrapping);
-  // app.use('/api', media);
+  app.use('/api/auth', require('./routes/auth'));
+  app.use('/api', require('./routes/scrapping'));
+  app.use('/api', require('./routes/products'));
   app.use(errorHandler);
 
   if (process.env.NODE_ENV === 'pro') {
