@@ -11,7 +11,7 @@ export class Scrapper implements IScrapper {
     this.URL = url;
     this.MAX_PAGE = maxPage;
   }
-
+  
   public async scrap(): Promise<Product[]> {
     const browser = await puppeteer.launch();
     const page = await this.gotoStart(browser);
@@ -32,7 +32,7 @@ export class Scrapper implements IScrapper {
     await browser.close();
     return result;
   }
-
+  
   private async gotoStart(browser: puppeteer.Browser): Promise<puppeteer.Page> {
     const page = await browser.newPage();
     await page.goto(this.URL);

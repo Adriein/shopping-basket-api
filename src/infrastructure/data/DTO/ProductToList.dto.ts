@@ -6,25 +6,25 @@ import { User } from './User.dto';
 @Entity()
 export class ProductToList {
   @PrimaryGeneratedColumn()
-  public postToCategoryId!: number;
+  id!: number;
 
   @Column()
-  public productId!: string;
+  productId!: string;
 
   @Column()
-  public listId!: string;
+  listId!: string;
 
   @Column()
-  public quantity!: number;
+  quantity!: number;
 
   @Column()
   status?: string;
 
   @ManyToOne((type) => List, (list) => list.id)
-  public list!: string;
+  list!: string;
 
   @ManyToOne((type) => Product, (product) => product.id)
-  public product!: string;
+  product!: string;
 
   @ManyToOne(() => User, (user) => user.id)
   userInCharge?: string;

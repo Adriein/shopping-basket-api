@@ -99,16 +99,4 @@ router.post(
   }
 );
 
-router.get(
-  '/test',
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      require('../infrastructure/scrapper/OpenFoodFactScrapper');
-      res.status(200).send({}); 
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 export { router as auth };
