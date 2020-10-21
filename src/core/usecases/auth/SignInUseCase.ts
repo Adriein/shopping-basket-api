@@ -1,10 +1,10 @@
 import { Response } from '../../entities';
 import { NotAuthorizedError, CustomError, UnExpectedError } from '../../errors';
 import { isEmpty, compare } from '../../helpers';
-import { Repository, UseCase, IUser } from '../../interfaces';
+import { IRepository, IUseCase, IUser } from '../../interfaces';
 
-export class SignInUseCase implements UseCase<IUser> {
-  constructor(private repository: Repository<IUser>) {}
+export class SignInUseCase implements IUseCase<IUser> {
+  constructor(private repository: IRepository<IUser>) {}
 
   async execute(body: {
     username: string;

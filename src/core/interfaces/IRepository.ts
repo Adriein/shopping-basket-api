@@ -1,4 +1,4 @@
-export interface Repository<T> {
+export interface IRepository<T> {
   findOne(id: string): Promise<T>;
   findMany(searchObj: any): Promise<T[]>;
   save(body: T): Promise<T>;

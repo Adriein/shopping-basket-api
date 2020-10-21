@@ -5,10 +5,10 @@ import { requireAuth } from './middlewares/auth';
 import express, { Router, Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserMapper } from '../infrastructure/data/Mappers/UserMapper';
-import { Repository, IUser } from '../core/interfaces';
+import { IRepository, IUser } from '../core/interfaces';
 
 const router: Router = express.Router();
-const userRepository: Repository<IUser> = new BaseRepository<IUser>(
+const userRepository: IRepository<IUser> = new BaseRepository<IUser>(
   'User',
   new UserMapper()
 );

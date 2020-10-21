@@ -1,5 +1,5 @@
 import { Response } from '../entities/Response';
 
-export interface UseCase<T> {
+export interface IUseCase<T> {
   execute(...args: any[]): Promise<Response<T>>;
 }

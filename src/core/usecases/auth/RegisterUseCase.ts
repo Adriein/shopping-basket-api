@@ -1,10 +1,10 @@
 import { User, Response } from '../../entities';
-import { IUser, UseCase, Repository } from '../../interfaces';
+import { IUser, IUseCase, IRepository } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
 import { isEmpty, hash } from '../../helpers';
 
-export class RegisterUseCase implements UseCase<IUser> {
-  constructor(private repository: Repository<IUser>) {}
+export class RegisterUseCase implements IUseCase<IUser> {
+  constructor(private repository: IRepository<IUser>) {}
 
   async execute(body: User): Promise<Response<IUser>> {
     try {

@@ -1,9 +1,9 @@
-import { Repository, Mapper } from '../../../core/interfaces';
+import { IRepository, IMapper } from '../../../core/interfaces';
 import { getConnection } from 'typeorm';
 
-export class BaseRepository<T> implements Repository<T> {
+export class BaseRepository<T> implements IRepository<T> {
   private database = getConnection().manager;
-  constructor(private entity: any, private mapper: Mapper<T>) {}
+  constructor(private entity: any, private mapper: IMapper<T>) {}
 
   async findOne(id: string): Promise<T> {
     const entity = await this.database.findByIds(this.entity, [id]);

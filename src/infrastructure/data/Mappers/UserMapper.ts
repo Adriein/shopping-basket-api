@@ -1,7 +1,7 @@
-import { IUser, Mapper } from '../../../core/interfaces';
+import { IUser, IMapper } from '../../../core/interfaces';
 import { User as UserDto } from '../DTO/User.dto';
 
-export class UserMapper implements Mapper<IUser> {
+export class UserMapper implements IMapper<IUser> {
   public toDomainEntity(users: UserDto[]): IUser[] {
     return users.map((userDto) => {
       return {

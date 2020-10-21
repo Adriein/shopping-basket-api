@@ -1,5 +1,5 @@
 import { Product } from "../entities/Product";
 
-export interface Scrapper {
+export interface IScrapper {
   scrap(): Promise<Product[]>;
 }

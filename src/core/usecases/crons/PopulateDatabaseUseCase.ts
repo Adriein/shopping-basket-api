@@ -1,11 +1,11 @@
 import { Response, Product } from '../../entities';
-import { UseCase, Repository, Scrapper, IProduct } from '../../interfaces';
+import { IUseCase, IRepository, IScrapper, IProduct } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
 
-export class PopulateDatabaseUseCase implements UseCase<string> {
+export class PopulateDatabaseUseCase implements IUseCase<string> {
   constructor(
-    private repository: Repository<IProduct>,
-    private scrapper: Scrapper
+    private repository: IRepository<IProduct>,
+    private scrapper: IScrapper
   ) {}
 
   async execute(): Promise<Response<string>> {

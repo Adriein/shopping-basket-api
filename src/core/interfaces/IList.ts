@@ -2,7 +2,7 @@ import { ListStatus } from "../entities/ListStatus";
 import { IProduct } from "./IProduct";
 import { User } from "../entities/User";
 
-export interface List {
+export interface IList {
     id: string;
     title: string;
     users: User[];

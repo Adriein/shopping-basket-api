@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 import { Product } from '../../core/entities/Product';
-import { Scrapper as IScrapper } from '../../core/interfaces';
+import { IScrapper } from '../../core/interfaces';
 
 export class Scrapper implements IScrapper {
   private readonly URL: string;
