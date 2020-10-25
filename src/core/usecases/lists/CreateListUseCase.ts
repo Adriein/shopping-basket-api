@@ -20,7 +20,7 @@ export class CreateListUseCase implements IUseCase<string> {
       //Add the owner of the list in the first position
       list.users.unshift(ownerId);
 
-      this.repository.save(list);
+      await this.repository.save(list);
 
       return new Response(['List created']);
     } catch (error) {

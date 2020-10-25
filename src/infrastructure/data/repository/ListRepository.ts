@@ -1,6 +1,5 @@
 import { IList, ProductStatus } from '../../../core/entities';
 import { IMapper } from '../../../core/interfaces';
-import { products } from '../../../routes';
 import { List } from '../DTO/List.dto';
 import { Product } from '../DTO/Product.dto';
 import { ProductToList } from '../DTO/ProductToList.dto';
@@ -9,6 +8,13 @@ import { BaseRepository } from './BaseRepository';
 export class ListRepository extends BaseRepository<IList> {
   constructor(entity: string, mapper: IMapper<IList>) {
     super(entity, mapper);
+  }
+
+  async findMany(searchObj: any): Promise<IList[]> {
+    const entities = await this.database.find(this.entity, searchObj);
+    console.log(JSON.stringify(entities));
+
+    return this.mapper.toDomainEntity(entities);
   }
 
   async save(body: IList): Promise<IList> {
@@ -27,6 +33,7 @@ export class ListRepository extends BaseRepository<IList> {
           const productOnDb = await this.database
             .getRepository(Product)
             .findOne(product.id);
+
           const productToList = new ProductToList();
 
           productToList.quantity = product.quantity;
@@ -35,7 +42,7 @@ export class ListRepository extends BaseRepository<IList> {
           productToList.list = list;
           productToList.product = productOnDb;
 
-          await this.database.getRepository(ProductToList).save(productToList)
+          await this.database.getRepository(ProductToList).save(productToList);
         })
       );
     }

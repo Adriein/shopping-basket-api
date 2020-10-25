@@ -1,7 +1,7 @@
 export interface IUser {
   id: string;
-  publicId: string;
+  publicId?: string;
   username: string;
-  password: string;
-  creation: Date;
+  password?: string;
+  creation?: Date;
 }

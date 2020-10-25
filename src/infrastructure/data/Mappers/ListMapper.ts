@@ -1,8 +1,13 @@
-import { IList, IMapper, IProductInList } from '../../../core/interfaces';
+import {
+  IList,
+  IMapper,
+  IProductInList,
+  IUser,
+} from '../../../core/interfaces';
 import { List as ListDto } from '../DTO/List.dto';
 import { User as UserDto } from '../DTO/User.dto';
 
-import { ListStatus, ProductStatus } from '../../../core/entities';
+import { ListStatus } from '../../../core/entities';
 
 export class ListMapper implements IMapper<IList> {
   public toDomainEntity(list: ListDto[]): IList[] {
@@ -18,11 +23,13 @@ export class ListMapper implements IMapper<IList> {
     });
   }
 
-  private getUsernames(users: UserDto[]): string[] {
+  private getUsernames(users: UserDto[]): IUser[] {
     if (!users || users.length === 0) {
       return [];
     }
-    return users.map((user) => user.username!);
+    return users.map((user) => {
+      return { username: user.username!, id: user.id! };
+    });
   }
 
   private getStatus(status: string): ListStatus {
@@ -45,13 +52,13 @@ export class ListMapper implements IMapper<IList> {
 
     return products.map((product) => {
       return {
-        id: '',
-        name: '',
-        supermarket: '0',
-        img: '0',
-        quantity: 0,
-        status: ProductStatus.active,
-        userInCharge: '',
+        id: product.id,
+        name: product.name,
+        supermarket: product.supermarket,
+        img: product.img,
+        quantity: product.quantity,
+        status: product.status,
+        userInCharge: product.userInCharge,
       };
     });
   }
