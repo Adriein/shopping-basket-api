@@ -1,31 +1,24 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { List } from './List.dto';
 import { Product } from './Product.dto';
-import { User } from './User.dto';
 
-@Entity()
+@Entity('product_to_list')
 export class ProductToList {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id?: number;
 
   @Column()
-  productId!: string;
-
-  @Column()
-  listId!: string;
-
-  @Column()
-  quantity!: number;
+  quantity?: number;
 
   @Column()
   status?: string;
 
-  @ManyToOne((type) => List, (list) => list.id)
-  list!: string;
-
-  @ManyToOne((type) => Product, (product) => product.id)
-  product!: string;
-
-  @ManyToOne(() => User, (user) => user.id)
+  @Column()
   userInCharge?: string;
+
+  @ManyToOne((type) => List, (list) => list.productToList)
+  list?: List;
+
+  @ManyToOne((type) => Product, (product) => product.productToList)
+  product?: Product;
 }

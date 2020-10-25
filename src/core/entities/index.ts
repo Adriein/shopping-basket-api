@@ -5,3 +5,4 @@ export * from '../interfaces/IList';
 export * from './ProductStatus';
 export * from './ListStatus';
 export * from './Product';
+export * from './List';

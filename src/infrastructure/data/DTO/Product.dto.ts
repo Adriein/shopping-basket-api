@@ -1,4 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { ProductToList } from './ProductToList.dto';
 import { User } from './User.dto';
 
 @Entity('product')
@@ -11,4 +12,6 @@ export class Product {
   img?: string;
   @Column()
   supermarket?: string;
+  @OneToMany(() => ProductToList, (productToList) => productToList.product)
+  public productToList!: ProductToList[];
 }

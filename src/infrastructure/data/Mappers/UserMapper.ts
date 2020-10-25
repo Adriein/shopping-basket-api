@@ -13,4 +13,8 @@ export class UserMapper implements IMapper<IUser> {
       };
     });
   }
+
+  public toDto(product: IUser): any {
+    throw new Error();
+  }
 }

@@ -1,5 +1,12 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
-import { Product } from './Product.dto';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
+import { ProductToList } from './ProductToList.dto';
 import { User } from './User.dto';
 
 @Entity('list')
@@ -13,9 +20,8 @@ export class List {
   users?: User[];
   @Column()
   status?: string;
-  @Column()
-  dateCreated?: Date;
-  @ManyToMany((type) => Product)
-  @JoinTable()
-  products?: Product[];
+  @Column({ type: 'date' })
+  creation?: Date;
+  @OneToMany(() => ProductToList, (productToList) => productToList.list)
+  productToList!: ProductToList[];
 }

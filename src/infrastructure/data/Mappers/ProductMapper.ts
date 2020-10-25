@@ -12,4 +12,8 @@ export class ProductMapper implements IMapper<IProduct> {
       };
     });
   }
+
+  public toDto(product: IProduct): any{
+    throw new Error();
+  } 
 }

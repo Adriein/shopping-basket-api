@@ -5,3 +5,5 @@ export * from './IProduct';
 export * from './IRepository';
 export * from './IUseCase';
 export * from './IScrapper';
+export * from './IUserToFriend';
+export * from './IProductInList';

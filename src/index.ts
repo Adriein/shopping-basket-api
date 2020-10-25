@@ -47,9 +47,16 @@ const init = async () => {
       httpOnly: false,
     })
   );
-  app.use('/api/auth', require('./routes/auth'));
-  app.use('/api', require('./routes/scrapping'));
-  app.use('/api', require('./routes/products'));
+  const { auth } = require('./routes/auth');
+  const { scrapping } = require('./routes/scrapping');
+  const { products } = require('./routes/products');
+  const { users } = require('./routes/users');
+  const { lists } = require('./routes/lists');
+  app.use('/api/auth', auth);
+  app.use('/api', scrapping);
+  app.use('/api', products);
+  app.use('/api', users);
+  app.use('/api', lists);
   app.use(errorHandler);
 
   if (process.env.NODE_ENV === 'pro') {

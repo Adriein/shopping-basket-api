@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { ProductToList } from './ProductToList.dto';
 
-@Entity("user")
+@Entity('user')
 export class User {
   @PrimaryColumn()
   id?: string;
