@@ -6,6 +6,7 @@ import {
 } from '../../../core/interfaces';
 import { List as ListDto } from '../DTO/List.dto';
 import { User as UserDto } from '../DTO/User.dto';
+import { ProductToList as ProductToListDto } from '../DTO/ProductToList.dto';
 
 import { ListStatus } from '../../../core/entities';
 
@@ -50,12 +51,13 @@ export class ListMapper implements IMapper<IList> {
       return [];
     }
 
-    return products.map((product) => {
+    return products.map((product: any) => {
       return {
         id: product.id,
-        name: product.name,
-        supermarket: product.supermarket,
-        img: product.img,
+        productId: product.productId,
+        name: product.product.name,
+        supermarket: product.product.supermarket,
+        img: product.product.img,
         quantity: product.quantity,
         status: product.status,
         userInCharge: product.userInCharge,

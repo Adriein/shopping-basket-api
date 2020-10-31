@@ -1,18 +1,18 @@
 import { generateUuid } from '../helpers';
-import { IList, IProductInList } from '../interfaces';
+import { IList, IProductInList, IUser } from '../interfaces';
 import { ListStatus } from './ListStatus';
 
 export class List implements IList {
   private _id?: string;
   private _title: string;
-  private _users: string[];
+  private _users: IUser[];
   private _status: ListStatus;
   private _creation!: Date;
   private _products?: IProductInList[];
 
   constructor(
     title: string,
-    users: string[],
+    users: IUser[],
     status: ListStatus,
     id?: string,
     products?: IProductInList[]
@@ -36,7 +36,7 @@ export class List implements IList {
     return this._title;
   }
 
-  public get users(): string[] {
+  public get users(): IUser[] {
     return this._users;
   }
 

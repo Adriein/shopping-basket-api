@@ -2,27 +2,18 @@ import { IList, List, ListStatus, Response, User } from '../../entities';
 import { IUseCase, IRepository, IUser } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
 
-export class CreateListUseCase implements IUseCase<string> {
+export class UpdateListUseCase implements IUseCase<string> {
   constructor(private repository: IRepository<IList>) {}
 
-  async execute(body: IList, ownerId: string): Promise<Response<string>> {
+  async execute(id: string, body: IList): Promise<Response<string>> {
     try {
-      const { title, users, products } = body;
+      const { title, users, products, status } = body;
 
-      const list = new List(
-        title,
-        this.getUsers(users),
-        ListStatus.IN_CONSTRUCTION,
-        undefined,
-        products
-      );
+      const list = new List(title, this.getUsers(users), status, id, products);
 
-      //Add the owner of the list in the first position
-      list.users.unshift(new User('', '', ownerId));
+      await this.repository.update(id, list);
 
-      await this.repository.save(list);
-
-      return new Response(['List created']);
+      return new Response(['List updated']);
     } catch (error) {
       if (error instanceof CustomError) throw error;
       throw new UnExpectedError(error.message);

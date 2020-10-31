@@ -5,3 +5,4 @@ export * from './users/AgregateFriendUseCase';
 export * from './users/GetFriendsUseCase';
 export * from './lists/CreateListUseCase';
 export * from './lists/GetListUseCase';
+export * from './lists/UpdateListUseCase';

@@ -1,7 +1,11 @@
 import { currentUser, requireAuth } from './middlewares/auth';
 import express, { Router, Request, Response, NextFunction } from 'express';
 import { IList, IRepository } from '../core/interfaces';
-import { CreateListUseCase, GetListUseCase } from '../core/usecases';
+import {
+  CreateListUseCase,
+  GetListUseCase,
+  UpdateListUseCase,
+} from '../core/usecases';
 import { ListMapper } from '../infrastructure/data/Mappers/ListMapper';
 import { ListRepository } from '../infrastructure/data/repository/ListRepository';
 
@@ -25,12 +29,12 @@ router.get(
 );
 
 router.get(
-  '/list',
+  '/list/:id',
   requireAuth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const getListUseCase = new GetListUseCase(listRepository);
-      res.status(200).send((await getListUseCase.execute(req.body)).data);
+      res.status(200).send((await getListUseCase.execute(req.params.id)).data);
     } catch (error) {
       next(error);
     }
@@ -55,26 +59,19 @@ router.post(
   }
 );
 
-// router.put(
-//   '/list',
-//   requireAuth,
-//   currentUser,
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const agregateFriendUseCase = new AgregateFriendUseCase(
-//         usersRepository,
-//         userToFriendRepository
-//       );
-//       res
-//         .status(200)
-//         .send(
-//           (await agregateFriendUseCase.execute(req.body, req.currentUser!.id))
-//             .data
-//         );
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
+router.put(
+  '/list/:id',
+  requireAuth,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const updateListUseCase = new UpdateListUseCase(listRepository);
+      res
+        .status(200)
+        .send((await updateListUseCase.execute(req.params.id, req.body)).data);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export { router as lists };

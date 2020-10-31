@@ -1,5 +1,5 @@
 import { IList, Response } from '../../entities';
-import { IUseCase, IRepository } from '../../interfaces';
+import { IUseCase, IRepository, IProduct } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
 
 export class GetListUseCase implements IUseCase<IList> {
@@ -8,12 +8,15 @@ export class GetListUseCase implements IUseCase<IList> {
   async execute(id?: string): Promise<Response<IList>> {
     try {
       if (id) {
-        const list = await this.repository.findOne(id);
-        return new Response([list]);
+        const list = await this.repository.findMany({
+          relations: ['users', 'productToList'],
+          where: { id },
+        });
+        return new Response(list);
       }
 
       const lists = await this.repository.findMany({
-          relations: ['users', 'productToList']
+        relations: ['users', 'productToList'],
       });
 
       return new Response(lists);

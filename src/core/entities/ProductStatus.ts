@@ -1,4 +1,4 @@
 export enum ProductStatus {
-  active = 'bought',
-  closed = 'not bought',
+  BOUGHT = 'bought',
+  NOT_BOUGHT = 'not bought',
 }
