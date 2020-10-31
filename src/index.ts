@@ -71,7 +71,7 @@ const init = async () => {
     console.log(chalk.bgGreen.black.bold(`Server running...`));
   });
 };
-
+//coment
 const env = () => {
   if (
     !process.env.DATABASE_HOST ||
