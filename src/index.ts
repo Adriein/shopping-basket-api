@@ -65,13 +65,6 @@ const init = async () => {
         res.redirect(`https://${req.header('host')}${req.url}`);
       else next();
     });
-    app.use(express.static('client/build'));
-
-    app.get('*', (req, res) => {
-      res.sendFile(
-        path.resolve(__dirname, '..', 'client', 'build', 'index.html')
-      );
-    });
   }
 
   app.listen(app.get('port'), () => {
