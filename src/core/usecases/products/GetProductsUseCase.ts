@@ -1,14 +1,21 @@
 import { Response } from '../../entities';
-import { IUseCase, IRepository, IScrapper, IProduct } from '../../interfaces';
+import { IUseCase, IRepository, IProduct } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
+import { Like } from 'typeorm';
 
 export class GetProductsUseCase implements IUseCase<IProduct> {
   constructor(private repository: IRepository<IProduct>) {}
 
   async execute(pagination?: any): Promise<Response<IProduct>> {
     try {
-      if (pagination && pagination.page && pagination.limit) {
+      if (
+        pagination &&
+        pagination.page &&
+        pagination.limit &&
+        pagination.search
+      ) {
         const products: IProduct[] = await this.repository.findMany({
+          where: { name: Like(`%${pagination.search}%`) },
           skip: parseInt(pagination.page) * parseInt(pagination.limit),
           take: parseInt(pagination.limit),
         });
