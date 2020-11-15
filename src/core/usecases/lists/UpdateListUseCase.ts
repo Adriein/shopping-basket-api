@@ -1,4 +1,4 @@
-import { IList, List, ListStatus, Response, User } from '../../entities';
+import { IList, List, Response, User } from '../../entities';
 import { IUseCase, IRepository, IUser } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
 

@@ -5,10 +5,18 @@ import { CustomError, UnExpectedError } from '../../errors';
 export class GetProductsUseCase implements IUseCase<IProduct> {
   constructor(private repository: IRepository<IProduct>) {}
 
-  async execute(): Promise<Response<IProduct>> {
+  async execute(pagination?: any): Promise<Response<IProduct>> {
     try {
-      const products: IProduct[] = await this.repository.findMany({});
+      if (pagination && pagination.page && pagination.limit) {
+        const products: IProduct[] = await this.repository.findMany({
+          skip: parseInt(pagination.page) * parseInt(pagination.limit),
+          take: parseInt(pagination.limit),
+        });
 
+        return new Response<IProduct>(products);
+      }
+      const products: IProduct[] = await this.repository.findMany({});
+      //SELECT * FROM product LIMIT 1000 OFFSET 1100;
       return new Response<IProduct>(products);
     } catch (error) {
       if (error instanceof CustomError) throw error;

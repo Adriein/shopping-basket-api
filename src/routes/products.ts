@@ -16,8 +16,10 @@ router.get(
   requireAuth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const {page, limit} = req.query;
+
       const getProductsUseCase = new GetProductsUseCase(productRepository);
-      res.status(200).send((await getProductsUseCase.execute()).data);
+      res.status(200).send((await getProductsUseCase.execute({page, limit})).data);
     } catch (error) {
       next(error);
     }

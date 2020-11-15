@@ -3,7 +3,6 @@ import 'reflect-metadata';
 import express from 'express';
 import bodyParser from 'body-parser';
 import chalk from 'chalk';
-import path from 'path';
 import cookieSession from 'cookie-session';
 import { errorHandler } from './routes/middlewares';
 import { createConnection } from 'typeorm';
@@ -19,7 +18,7 @@ const init = async () => {
       password: process.env.DATABASE_PASSWORD!,
       database: process.env.DATABASE_NAME!,
       entities: [`${__dirname}/infrastructure/data/DTO/**/*.js`],
-      synchronize: true,
+      synchronize: process.env.NODE_ENV === 'pro' ? false : true,
     });
 
     console.log(chalk.green('Conected to PostgreSQL'));

@@ -8,6 +8,7 @@ import {
 } from '../core/usecases';
 import { ListMapper } from '../infrastructure/data/Mappers/ListMapper';
 import { ListRepository } from '../infrastructure/data/repository/ListRepository';
+import { List } from '../core/entities/RefactorList';
 
 const router: Router = express.Router();
 const listRepository: IRepository<IList> = new ListRepository(
@@ -65,6 +66,7 @@ router.put(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const updateListUseCase = new UpdateListUseCase(listRepository);
+      const list = List.create(req.body.title, req.body.users, req.body.status, req.body.products);
       res
         .status(200)
         .send((await updateListUseCase.execute(req.params.id, req.body)).data);
