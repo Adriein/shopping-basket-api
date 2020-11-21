@@ -1,21 +1,21 @@
-import { IList, ProductStatus } from '../../../core/entities';
-import { IMapper, IProductInList } from '../../../core/interfaces';
-import { users } from '../../../routes/users';
-import { List } from '../DTO/List.dto';
-import { Product } from '../DTO/Product.dto';
+import { List, Product } from '../../../core/entities';
+import { ProductEnum } from '../../../core/enums/ProductEnum';
+import { IMapper } from '../../../core/interfaces';
+import { List as ListDTO } from '../DTO/List.dto';
+import { Product as ProductDTO } from '../DTO/Product.dto';
 import { ProductToList } from '../DTO/ProductToList.dto';
 import { BaseRepository } from './BaseRepository';
 
-export class ListRepository extends BaseRepository<IList> {
-  constructor(entity: string, mapper: IMapper<IList>) {
+export class ListRepository extends BaseRepository<List> {
+  constructor(entity: string, mapper: IMapper<List>) {
     super(entity, mapper);
   }
 
-  async findMany(searchObj: any): Promise<IList[]> {
-    const lists: List[] = await this.database.find(this.entity, searchObj);
+  async findMany(searchObj: any): Promise<List[]> {
+    const lists: ListDTO[] = await this.database.find(this.entity, searchObj);
     for (let list of lists) {
-      list.productToList = await Promise.all(
-        list.productToList.map(async (productToList) => {
+      list.products = await Promise.all(
+        list.products.map(async (productToList) => {
           const [hydratedProductToList] = await this.database
             .getRepository(ProductToList)
             .find({
@@ -30,18 +30,20 @@ export class ListRepository extends BaseRepository<IList> {
     return this.mapper.toDomainEntity(lists);
   }
 
-  async save(body: IList): Promise<IList> {
-    const listDto = this.mapper.toDto(body);
-    const list = await this.database.getRepository(List).save(listDto);
+  async save(list: List): Promise<List> {
+    const listDto = this.mapper.toDto(list);
+    const listDTO: ListDTO = await this.database
+      .getRepository(List)
+      .save(listDto);
 
     await this.database
       .createQueryBuilder()
       .relation(List, 'users')
-      .of(list.id)
-      .add(body.users.map((user) => user.id));
+      .of(listDTO.id)
+      .add(list.getUsers().map((user) => user.getId()));
 
-    if (body.products) {
-      await this.saveProductToList(body.products, list);
+    if (list.getProducts()) {
+      await this.saveProductToList(list.getProducts(), list);
     }
 
     return list;
@@ -81,20 +83,20 @@ export class ListRepository extends BaseRepository<IList> {
   }
 
   private async saveProductToList(
-    products: IProductInList[],
+    products: Product[],
     list: any
   ): Promise<void> {
     await Promise.all(
       products.map(async (product) => {
-        const productOnDb = await this.database
+        const productOnDb: any = await this.database
           .getRepository(Product)
-          .findOne(product.id);
+          .findOne(product.getId());
 
         const productToList = new ProductToList();
 
-        productToList.quantity = product.quantity;
-        productToList.status = ProductStatus.NOT_BOUGHT;
-        productToList.userInCharge = product.userInCharge;
+        productToList.quantity = product.getQuantity();
+        productToList.status = ProductEnum.NOT_BOUGHT;
+        productToList.userInCharge = product.getUser();
         productToList.list = list;
         productToList.product = productOnDb;
 

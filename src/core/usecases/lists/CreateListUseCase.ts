@@ -1,39 +1,26 @@
-import { IList, List, ListStatus, Response, User } from '../../entities';
+import { List, User, ShoppingBasketResponse } from '../../entities';
 import { IUseCase, IRepository } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
+import { ListEnum } from '../../enums/ListEnum';
+import { CreateListRequest } from '../../request';
 
 export class CreateListUseCase implements IUseCase<string> {
-  constructor(private listRepository: IRepository<IList>, private usersRepository: IRepository<User>) {}
+  constructor(private listRepository: IRepository<List>, private usersRepository: IRepository<User>) {}
 
-  async execute(body: IList, ownerId: string): Promise<Response<string>> {
+  async execute(createListRequest: CreateListRequest, ownerId: string): Promise<ShoppingBasketResponse<string>> {
     try {
-      const { title, users, products } = body;
+      const { title, users, products, ownerId } = createListRequest;
 
-      const list = new List(
-        title,
-        this.getUsers(users),
-        ListStatus.IN_CONSTRUCTION,
-        undefined,
-        products
-      );
+      const list = List.create(title, [ownerId, ...users], ListEnum.IN_CONSTRUCTION, products);
       
       const user = this.usersRepository.findOne(ownerId);
-      
-      //Add the owner of the list in the first position
-      list.users.unshift(user);
 
       await this.listRepository.save(list);
 
-      return new Response(['List created']);
+      return new ShoppingBasketResponse(['List created']);
     } catch (error) {
       if (error instanceof CustomError) throw error;
       throw new UnExpectedError(error.message);
     }
-  }
-
-  private getUsers(users: any): IUser[] {
-    return users.map((userId: any) => {
-      return new User('', '', userId);
-    });
   }
 }

@@ -15,7 +15,7 @@ export class List {
   id?: string;
   @Column()
   title?: string;
-  @ManyToMany((type) => User)
+  @ManyToMany(() => User)
   @JoinTable()
   users?: User[];
   @Column()
@@ -23,5 +23,5 @@ export class List {
   @Column({ type: 'date' })
   creation?: Date;
   @OneToMany(() => ProductToList, (productToList) => productToList.list)
-  productToList!: ProductToList[];
+  products!: ProductToList[];
 }

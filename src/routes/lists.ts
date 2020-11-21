@@ -1,6 +1,6 @@
 import { currentUser, requireAuth } from './middlewares/auth';
 import express, { Router, Request, Response, NextFunction } from 'express';
-import { IList, IRepository } from '../core/interfaces';
+import { IRepository } from '../core/interfaces';
 import {
   CreateListUseCase,
   GetListUseCase,
@@ -11,7 +11,7 @@ import { ListRepository } from '../infrastructure/data/repository/ListRepository
 import { List } from '../core/entities/List';
 
 const router: Router = express.Router();
-const listRepository: IRepository<IList> = new ListRepository(
+const listRepository: IRepository<List> = new ListRepository(
   'List',
   new ListMapper()
 );

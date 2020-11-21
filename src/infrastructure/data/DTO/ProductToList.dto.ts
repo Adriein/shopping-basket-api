@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { List } from './List.dto';
 import { Product } from './Product.dto';
 
@@ -16,7 +16,7 @@ export class ProductToList {
   @Column()
   userInCharge?: string;
 
-  @ManyToOne((type) => List, (list) => list.productToList)
+  @ManyToOne((type) => List, (list) => list.products)
   list?: List;
 
   @ManyToOne((type) => Product, (product) => product.productToList)

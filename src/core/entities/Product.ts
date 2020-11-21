@@ -1,6 +1,5 @@
 import { ProductEnum } from '../enums/ProductEnum';
 import { generateUuid } from '../helpers';
-import { User } from './User';
 
 export class Product {
   constructor(
@@ -9,10 +8,9 @@ export class Product {
     private img: string,
     private supermarket: string,
     private status?: ProductEnum,
-    private user?: User,
+    private user?: string,
     private quantity?: number,
-    private listId?: number
-
+    private listId?: string
   ) {}
 
   getName(): string {
@@ -29,6 +27,18 @@ export class Product {
 
   getSupermarket(): string {
     return this.supermarket;
+  }
+
+  getUser(): string {
+    return this.user!;
+  }
+
+  getStatus(): ProductEnum {
+    return this.status!;
+  }
+
+  getQuantity(): number {
+    return this.quantity!;
   }
 
   public static create(

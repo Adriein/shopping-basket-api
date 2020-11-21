@@ -9,16 +9,16 @@ export class GetListUseCase implements IUseCase<List> {
     try {
       if (id) {
         const list = await this.repository.findMany({
-          relations: ['users', 'productToList'],
+          relations: ['users', 'products'],
           where: { id },
         });
         return new ShoppingBasketResponse(list);
       }
 
       const lists = await this.repository.findMany({
-        relations: ['users', 'productToList'],
+        relations: ['users', 'products'],
       });
-
+      
       return new ShoppingBasketResponse(lists);
     } catch (error) {
       if (error instanceof CustomError) throw error;

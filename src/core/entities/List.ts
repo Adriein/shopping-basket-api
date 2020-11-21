@@ -1,6 +1,6 @@
 import { ListEnum } from '../enums/ListEnum';
 import { ValidationError } from '../errors/ValidationError';
-import { generateUuid } from '../helpers';
+import { generateUuid, maskFields } from '../helpers';
 import { Product } from './Product';
 import { User } from './User';
 
@@ -22,7 +22,9 @@ export class List {
   ) {
     this.id = id;
     this.title = title;
-    this.users = users;
+    this.users = users.map((user) =>
+      maskFields(user, ['password', 'publicId', 'creation'])
+    ) as User[];
     this.status = status;
     this.products = products;
     this.creation = creation;
