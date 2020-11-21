@@ -5,10 +5,11 @@ import { requireAuth } from './middlewares/auth';
 import express, { Router, Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserMapper } from '../infrastructure/data/Mappers/UserMapper';
-import { IRepository, IUser } from '../core/interfaces';
+import { IRepository } from '../core/interfaces';
+import { User } from '../core/entities';
 
 const router: Router = express.Router();
-const userRepository: IRepository<IUser> = new BaseRepository<IUser>(
+const userRepository: IRepository<User> = new BaseRepository<User>(
   'User',
   new UserMapper()
 );
@@ -19,9 +20,10 @@ router.post(
     try {
       //Creating the user
       const usecase = new RegisterUseCase(userRepository);
-      const [user] = (await usecase.execute(req.body)).data as IUser[];
+      const [user] = (await usecase.execute(req.body)).data as User[];
 
-      const { id, username } = user;
+      const id = user.getId();
+      const username = user.getPassword();
 
       // Generate JWT
       const userJwt = jwt.sign(
@@ -59,12 +61,12 @@ router.post(
         password,
       };
 
-      const [user] = (await signin.execute(credentials)).data as IUser[];
+      const [user] = (await signin.execute(credentials)).data as User[];
 
       // Generate JWT
       const userJwt = jwt.sign(
         {
-          id: user.id,
+          id: user.getId(),
           username,
         },
         process.env.JWT_KEY!

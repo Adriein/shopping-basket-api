@@ -1,6 +1,0 @@
-export interface IProduct {
-  id: string;
-  name: string;
-  img: string;
-  supermarket: string;
-}

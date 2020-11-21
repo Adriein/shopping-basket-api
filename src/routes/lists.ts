@@ -8,7 +8,7 @@ import {
 } from '../core/usecases';
 import { ListMapper } from '../infrastructure/data/Mappers/ListMapper';
 import { ListRepository } from '../infrastructure/data/repository/ListRepository';
-import { List } from '../core/entities/RefactorList';
+import { List } from '../core/entities/List';
 
 const router: Router = express.Router();
 const listRepository: IRepository<IList> = new ListRepository(

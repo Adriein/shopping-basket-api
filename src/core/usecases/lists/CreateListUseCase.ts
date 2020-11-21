@@ -1,9 +1,9 @@
 import { IList, List, ListStatus, Response, User } from '../../entities';
-import { IUseCase, IRepository, IUser } from '../../interfaces';
+import { IUseCase, IRepository } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
 
 export class CreateListUseCase implements IUseCase<string> {
-  constructor(private repository: IRepository<IList>) {}
+  constructor(private listRepository: IRepository<IList>, private usersRepository: IRepository<User>) {}
 
   async execute(body: IList, ownerId: string): Promise<Response<string>> {
     try {
@@ -16,11 +16,13 @@ export class CreateListUseCase implements IUseCase<string> {
         undefined,
         products
       );
-
+      
+      const user = this.usersRepository.findOne(ownerId);
+      
       //Add the owner of the list in the first position
-      list.users.unshift(new User('', '', ownerId));
+      list.users.unshift(user);
 
-      await this.repository.save(list);
+      await this.listRepository.save(list);
 
       return new Response(['List created']);
     } catch (error) {

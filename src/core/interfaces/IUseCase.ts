@@ -1,5 +1,5 @@
-import { Response } from '../entities/Response';
+import { ShoppingBasketResponse } from '../entities/ShoppingBasketResponse';
 
 export interface IUseCase<T> {
-  execute(...args: any[]): Promise<Response<T>>;
+  execute(...args: any[]): Promise<ShoppingBasketResponse<T>>;
 }

@@ -1,5 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { ProductToList } from './ProductToList.dto';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('user')
 export class User {
@@ -13,4 +12,17 @@ export class User {
   password?: string;
   @Column({ type: 'date' })
   creation?: Date;
+  @ManyToMany((type) => User)
+  @JoinTable({
+    name: 'followers',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'follower_id',
+      referencedColumnName: 'id',
+    },
+  })
+  followers?: User[];
 }

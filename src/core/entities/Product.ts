@@ -1,31 +1,41 @@
+import { ProductEnum } from '../enums/ProductEnum';
 import { generateUuid } from '../helpers';
-import { IProduct } from '../interfaces/IProduct';
+import { User } from './User';
 
-export class Product implements IProduct {
+export class Product {
   constructor(
-    private _name: string,
-    private _img: string,
-    private _supermarket: string,
-    private _id?: string
-  ) {
-    if (!_id) {
-      this._id = generateUuid();
-    }
+    private id: string,
+    private name: string,
+    private img: string,
+    private supermarket: string,
+    private status?: ProductEnum,
+    private user?: User,
+    private quantity?: number,
+    private listId?: number
+
+  ) {}
+
+  getName(): string {
+    return this.name;
   }
 
-  get name(): string {
-    return this._name;
+  getImg(): string {
+    return this.img;
   }
 
-  get img(): string {
-    return this._img;
+  getId(): string {
+    return this.id!;
   }
 
-  get id(): string {
-    return this._id!;
+  getSupermarket(): string {
+    return this.supermarket;
   }
 
-  get supermarket(): string {
-    return this._supermarket;
+  public static create(
+    name: string,
+    img: string,
+    supermarket: string
+  ): Product {
+    return new Product(generateUuid(), name, img, supermarket);
   }
 }

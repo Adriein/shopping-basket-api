@@ -1,20 +1,22 @@
-import { IUser, IMapper } from '../../../core/interfaces';
+import { User } from '../../../core/entities';
+import { IMapper } from '../../../core/interfaces';
 import { User as UserDto } from '../DTO/User.dto';
 
-export class UserMapper implements IMapper<IUser> {
-  public toDomainEntity(users: UserDto[]): IUser[] {
+export class UserMapper implements IMapper<User> {
+  public toDomainEntity(users: UserDto[]): User[] {
     return users.map((userDto) => {
-      return {
-        username: userDto.username!,
-        password: userDto.password!,
-        id: userDto.id!,
-        publicId: userDto.publicId!,
-        creation: userDto.creation!,
-      };
+      return new User(
+        userDto.id!,
+        userDto.username!,
+        userDto.password!,
+        userDto.publicId!,
+        userDto.creation!,
+        userDto.followers ? this.toDomainEntity(userDto.followers!) : undefined
+      );
     });
   }
 
-  public toDto(product: IUser): any {
+  public toDto(product: User): any {
     throw new Error();
   }
 }

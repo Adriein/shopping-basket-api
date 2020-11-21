@@ -1,15 +1,13 @@
-import { Response } from '../../entities';
+import { ShoppingBasketResponse, User } from '../../entities';
 import { NotAuthorizedError, CustomError, UnExpectedError } from '../../errors';
 import { isEmpty, compare } from '../../helpers';
-import { IRepository, IUseCase, IUser } from '../../interfaces';
+import { IRepository, IUseCase } from '../../interfaces';
+import { SigninRequest } from '../../request/SigninRequest';
 
-export class SignInUseCase implements IUseCase<IUser> {
-  constructor(private repository: IRepository<IUser>) {}
+export class SignInUseCase implements IUseCase<User> {
+  constructor(private repository: IRepository<User>) {}
 
-  async execute(body: {
-    username: string;
-    password: string;
-  }): Promise<Response<IUser>> {
+  async execute(body: SigninRequest): Promise<ShoppingBasketResponse<User>> {
     try {
       const { username, password } = body;
 
@@ -19,10 +17,10 @@ export class SignInUseCase implements IUseCase<IUser> {
       if (isEmpty(userOnDB)) throw new NotAuthorizedError();
 
       //Compare the password
-      if (!(await compare(userOnDB.password!, password!)))
+      if (!(await compare(userOnDB.getPassword(), password!)))
         throw new NotAuthorizedError();
 
-      return new Response<IUser>([userOnDB]);
+      return new ShoppingBasketResponse<User>([userOnDB]);
     } catch (error) {
       if (error instanceof CustomError) throw error;
       throw new UnExpectedError(error.message);
