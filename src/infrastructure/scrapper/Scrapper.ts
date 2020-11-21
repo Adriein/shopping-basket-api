@@ -20,7 +20,7 @@ export class Scrapper implements IScrapper {
 
     while (this.pageNumber <= this.MAX_PAGE) {
       const products: Product[] = (await this.scrapProducts(page)).map(
-        ({ title, img }) => new Product(title, img, 'mercadona')
+        ({ title, img }) => Product.create(title, img, 'mercadona')
       );
 
       result.push(...products);

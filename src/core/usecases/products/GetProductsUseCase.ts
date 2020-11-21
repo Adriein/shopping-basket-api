@@ -2,6 +2,7 @@ import { Product, ShoppingBasketResponse } from '../../entities';
 import { IUseCase, IRepository } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
 import { Like } from 'typeorm';
+import { GetProductRequest } from '../../request';
 
 export class GetProductsUseCase implements IUseCase<Product> {
   constructor(private repository: IRepository<Product>) {}

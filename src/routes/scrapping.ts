@@ -1,20 +1,26 @@
 import { BaseRepository } from '../infrastructure/data/repository';
 import { requireAuth } from './middlewares/auth';
 import express, { Router, Request, Response, NextFunction } from 'express';
-import { IProduct, IRepository, IScrapper } from '../core/interfaces';
+import { IRepository, IScrapper } from '../core/interfaces';
 import { PopulateDatabaseUseCase } from '../core/usecases';
 import { Scrapper } from '../infrastructure/scrapper/Scrapper';
-import {ProductMapper} from '../infrastructure/data/Mappers/ProductMapper';
+import { ProductMapper } from '../infrastructure/data/Mappers/ProductMapper';
+import { Product } from '../core/entities';
 
 const router: Router = express.Router();
-const scraperRepository: IRepository<IProduct> = new BaseRepository<IProduct>(
+const productRepository: IRepository<Product> = new BaseRepository<Product>(
   'Product',
   new ProductMapper()
 );
 
-const scrapper: IScrapper = new Scrapper(
+const mercadonaScrapper: IScrapper = new Scrapper(
   'https://es.openfoodfacts.org/marca/mercadona',
   63
+);
+
+const hacendadoScrapper: IScrapper = new Scrapper(
+  'https://es.openfoodfacts.org/marca/hacendado',
+  210
 );
 
 router.get(
@@ -22,11 +28,24 @@ router.get(
   requireAuth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const populateDbUseCase = new PopulateDatabaseUseCase(
-        scraperRepository,
-        scrapper
+      const populateMercadonaProducts = new PopulateDatabaseUseCase(
+        productRepository,
+        mercadonaScrapper
       );
-      res.status(200).send((await populateDbUseCase.execute()).data);
+      const populateHacendadoProducts = new PopulateDatabaseUseCase(
+        productRepository,
+        hacendadoScrapper
+      );
+
+      const [mercadonaResults] = (
+        await populateMercadonaProducts.execute()
+      ).data;
+      const [hacendadoResults] = (
+        await populateHacendadoProducts.execute()
+      ).data;
+
+      const result = mercadonaResults + hacendadoResults;
+      res.status(200).send(result);
     } catch (error) {
       next(error);
     }

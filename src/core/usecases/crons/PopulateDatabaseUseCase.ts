@@ -1,14 +1,14 @@
-import { Response, Product } from '../../entities';
-import { IUseCase, IRepository, IScrapper, IProduct } from '../../interfaces';
+import { ShoppingBasketResponse, Product } from '../../entities';
+import { IUseCase, IRepository, IScrapper } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
 
-export class PopulateDatabaseUseCase implements IUseCase<string> {
+export class PopulateDatabaseUseCase implements IUseCase<number> {
   constructor(
-    private repository: IRepository<IProduct>,
+    private repository: IRepository<Product>,
     private scrapper: IScrapper
   ) {}
 
-  async execute(): Promise<Response<string>> {
+  async execute(): Promise<ShoppingBasketResponse<number>> {
     try {
       //Scrap open foods DB
       const products: Product[] = await this.scrapper.scrap();
@@ -18,7 +18,7 @@ export class PopulateDatabaseUseCase implements IUseCase<string> {
         await this.repository.save(product);
       }
       //Resturn result of the cron
-      return new Response([`${products.length} have been inserted in to DB`]);
+      return new ShoppingBasketResponse([products.length]);
     } catch (error) {
       if (error instanceof CustomError) throw error;
       throw new UnExpectedError(error.message);

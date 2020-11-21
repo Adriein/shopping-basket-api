@@ -1,19 +1,20 @@
-import { IProduct, IMapper } from '../../../core/interfaces';
+import { Product } from '../../../core/entities';
+import { IMapper } from '../../../core/interfaces';
 import { Product as ProductDto } from '../DTO/Product.dto';
 
-export class ProductMapper implements IMapper<IProduct> {
-  public toDomainEntity(products: ProductDto[]): IProduct[] {
-    return products.map((productDto) => {
-      return {
-        id: productDto.id!,
-        name: productDto.name!,
-        img: productDto.img!,
-        supermarket: productDto.supermarket!,
-      };
+export class ProductMapper implements IMapper<Product> {
+  public toDomainEntity(products: ProductDto[]): Product[] {
+    return products.map((productDto: ProductDto) => {
+      return new Product(
+        productDto.id!,
+        productDto.name!,
+        productDto.img!,
+        productDto.supermarket!
+      );
     });
   }
 
-  public toDto(product: IProduct): any{
+  public toDto(product: Product): any {
     throw new Error();
-  } 
+  }
 }
