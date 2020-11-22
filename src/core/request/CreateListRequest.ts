@@ -1,13 +1,4 @@
-type Product = {
-  id: string;
-  quantity: string;
-  user: string;
-};
-
-type User = {
-  id: string;
-  username: string;
-};
+import { Product, User } from '../entities';
 
 export type CreateListRequest = {
   title: string;

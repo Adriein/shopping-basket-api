@@ -1,28 +1,25 @@
-import { IList, List, Response, User } from '../../entities';
-import { IUseCase, IRepository, IUser } from '../../interfaces';
+import { List, ShoppingBasketResponse } from '../../entities';
+import { IUseCase, IRepository } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
+import { UpdateListRequest } from '../../request/UpdateListRequest';
 
 export class UpdateListUseCase implements IUseCase<string> {
-  constructor(private repository: IRepository<IList>) {}
+  constructor(private repository: IRepository<List>) {}
 
-  async execute(id: string, body: IList): Promise<Response<string>> {
+  async execute(
+    request: UpdateListRequest
+  ): Promise<ShoppingBasketResponse<string>> {
     try {
-      const { title, users, products, status } = body;
+      const { id, title, users, products, status } = request;
 
-      const list = new List(title, this.getUsers(users), status, id, products);
+      const list = new List(id, title, users, status, new Date(), products);
 
-      await this.repository.update(id, list);
+      await this.repository.update(list.getId(), list);
 
-      return new Response(['List updated']);
+      return new ShoppingBasketResponse(['List updated']);
     } catch (error) {
       if (error instanceof CustomError) throw error;
       throw new UnExpectedError(error.message);
     }
-  }
-
-  private getUsers(users: any): IUser[] {
-    return users.map((userId: any) => {
-      return new User('', '', userId);
-    });
   }
 }

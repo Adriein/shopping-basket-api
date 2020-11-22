@@ -37,7 +37,7 @@ export class List {
     products: Product[] = []
   ): List {
     const _title = List.validate('title', title) as string;
-    const _status = List.validate('status', title) as ListEnum;
+    const _status = List.validate('status', status) as ListEnum;
     const _users = users; //User.create();
     const _products = products; //ProductsInList.create();
 
@@ -84,7 +84,7 @@ export class List {
         return value;
       case 'status':
         if (
-          typeof status !== 'string' ||
+          typeof value !== 'string' ||
           (value !== ListEnum.CLOSED &&
             value !== ListEnum.IN_CONSTRUCTION &&
             value !== ListEnum.READY)

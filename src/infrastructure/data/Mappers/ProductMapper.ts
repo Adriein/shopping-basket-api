@@ -1,6 +1,7 @@
 import { Product } from '../../../core/entities';
 import { IMapper } from '../../../core/interfaces';
 import { Product as ProductDto } from '../DTO/Product.dto';
+import { ProductToList } from '../DTO/ProductToList.dto';
 
 export class ProductMapper implements IMapper<Product> {
   public toDomainEntity(products: ProductDto[]): Product[] {
@@ -14,7 +15,7 @@ export class ProductMapper implements IMapper<Product> {
     });
   }
 
-  public toDto(product: Product): any {
+  public toDto(product: Product): ProductDto {
     throw new Error();
   }
 }

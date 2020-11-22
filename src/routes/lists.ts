@@ -9,11 +9,22 @@ import {
 import { ListMapper } from '../infrastructure/data/Mappers/ListMapper';
 import { ListRepository } from '../infrastructure/data/repository/ListRepository';
 import { List } from '../core/entities/List';
+import { Product, User } from '../core/entities';
+import { BaseRepository } from '../infrastructure/data/repository';
+import { UserMapper } from '../infrastructure/data/Mappers/UserMapper';
+import { CreateListRequest } from '../core/request';
+import { UpdateListRequest } from '../core/request/UpdateListRequest';
 
 const router: Router = express.Router();
+
 const listRepository: IRepository<List> = new ListRepository(
   'List',
   new ListMapper()
+);
+
+const usersRepository: IRepository<User> = new BaseRepository(
+  'User',
+  new UserMapper()
 );
 
 router.get(
@@ -48,11 +59,34 @@ router.post(
   currentUser,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const createListUseCase = new CreateListUseCase(listRepository);
+      const createListUseCase = new CreateListUseCase(
+        listRepository,
+        usersRepository
+      );
+
+      const request: CreateListRequest = {
+        title: req.body.title,
+        users: req.body.users.map(
+          (user: any) => new User(user.id, user.username, '', '', new Date())
+        ),
+        products: req.body.products.map(
+          (product: any) =>
+            new Product(
+              product.id,
+              product.name,
+              product.img,
+              product.supermarket,
+              product.status,
+              product.user,
+              product.quantity
+            )
+        ),
+      };
+
       res
         .status(200)
         .send(
-          (await createListUseCase.execute(req.body, req.currentUser!.id)).data
+          (await createListUseCase.execute(request, req.currentUser!.id)).data
         );
     } catch (error) {
       next(error);
@@ -66,10 +100,29 @@ router.put(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const updateListUseCase = new UpdateListUseCase(listRepository);
-      const list = List.create(req.body.title, req.body.users, req.body.status, req.body.products);
+      const request: UpdateListRequest = {
+        id: req.params.id,
+        title: req.body.title,
+        users: req.body.users.map(
+          (user: any) => new User(user.id, user.username, '', '', new Date())
+        ),
+        status: req.body.status,
+        products: req.body.products.map(
+          (product: any) =>
+            new Product(
+              product.id,
+              product.name,
+              product.img,
+              product.supermarket,
+              product.status,
+              product.user,
+              product.quantity
+            )
+        ),
+      };
       res
         .status(200)
-        .send((await updateListUseCase.execute(req.params.id, req.body)).data);
+        .send((await updateListUseCase.execute(request)).data);
     } catch (error) {
       next(error);
     }

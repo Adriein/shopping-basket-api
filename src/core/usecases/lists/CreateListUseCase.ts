@@ -5,15 +5,26 @@ import { ListEnum } from '../../enums/ListEnum';
 import { CreateListRequest } from '../../request';
 
 export class CreateListUseCase implements IUseCase<string> {
-  constructor(private listRepository: IRepository<List>, private usersRepository: IRepository<User>) {}
+  constructor(
+    private listRepository: IRepository<List>,
+    private usersRepository: IRepository<User>
+  ) {}
 
-  async execute(createListRequest: CreateListRequest, ownerId: string): Promise<ShoppingBasketResponse<string>> {
+  async execute(
+    createListRequest: CreateListRequest,
+    ownerId: string
+  ): Promise<ShoppingBasketResponse<string>> {
     try {
-      const { title, users, products, ownerId } = createListRequest;
+      const { title, users, products } = createListRequest;
 
-      const list = List.create(title, [ownerId, ...users], ListEnum.IN_CONSTRUCTION, products);
-      
-      const user = this.usersRepository.findOne(ownerId);
+      const owner = await this.usersRepository.findOne(ownerId);
+
+      const list = List.create(
+        title,
+        [owner, ...users],
+        ListEnum.IN_CONSTRUCTION,
+        products
+      );
 
       await this.listRepository.save(list);
 
