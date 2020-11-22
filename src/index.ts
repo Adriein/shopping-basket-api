@@ -18,7 +18,7 @@ const init = async () => {
       password: process.env.DATABASE_PASSWORD!,
       database: process.env.DATABASE_NAME!,
       entities: [`${__dirname}/infrastructure/data/DTO/**/*.js`],
-      synchronize: process.env.NODE_ENV === 'pro' ? false : true,
+      synchronize: process.env.NODE_ENV === 'pro' ? true : true,
     });
 
     console.log(chalk.green('Conected to PostgreSQL'));
