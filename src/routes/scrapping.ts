@@ -20,7 +20,7 @@ const mercadonaScrapper: IScrapper = new Scrapper(
 
 const hacendadoScrapper: IScrapper = new Scrapper(
   'https://es.openfoodfacts.org/marca/hacendado',
-  210
+  209
 );
 
 router.get(
