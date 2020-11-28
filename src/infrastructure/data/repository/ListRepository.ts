@@ -114,11 +114,7 @@ export class ListRepository extends BaseRepository<List> {
       .relation(ListDTO, 'products')
       .of(list.id)
       .loadMany();
-
-    if (!productsAsociated || productsAsociated.length === 0) {
-      await Promise.all(this.updateProduct(products, list));
-    }
-
+      
     await Promise.all(
       productsAsociated.map(async (productsAsociated) => {
         await this.database
