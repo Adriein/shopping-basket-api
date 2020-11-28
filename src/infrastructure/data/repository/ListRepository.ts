@@ -115,6 +115,10 @@ export class ListRepository extends BaseRepository<List> {
       .of(list.id)
       .loadMany();
 
+    if (!productsAsociated || productsAsociated.length === 0) {
+      await Promise.all(this.updateProduct(products, list));
+    }
+
     await Promise.all(
       productsAsociated.map(async (productsAsociated) => {
         await this.database
@@ -123,20 +127,22 @@ export class ListRepository extends BaseRepository<List> {
       })
     );
 
-    await Promise.all(
-      products.map(async (product: Product) => {
-        const productToList = new ProductToList();
-        const productOnDb: any = await this.database
-          .getRepository(ProductDTO)
-          .findOne(product.getId());
-        productToList.userInCharge = product.getUser();
-        productToList!.quantity = product.getQuantity();
-        productToList!.status = product.getStatus();
-        productToList!.list = list;
-        productToList!.product = productOnDb;
+    await Promise.all(this.updateProduct(products, list));
+  }
 
-        await this.database.getRepository(ProductToList).save(productToList);
-      })
-    );
+  private updateProduct(products: any[], list: any): Promise<any>[] {
+    return products.map(async (product: Product) => {
+      const productToList = new ProductToList();
+      const productOnDb: any = await this.database
+        .getRepository(ProductDTO)
+        .findOne(product.getId());
+      productToList.userInCharge = product.getUser();
+      productToList!.quantity = product.getQuantity();
+      productToList!.status = product.getStatus();
+      productToList!.list = list;
+      productToList!.product = productOnDb;
+
+      await this.database.getRepository(ProductToList).save(productToList);
+    });
   }
 }
