@@ -41,7 +41,7 @@ router.post(
         .send(
           (
             await agregateFriendUseCase.execute({
-              publicId: req.body,
+              publicId: req.body.publicId,
               currentUserId: req.currentUser!.id,
             })
           ).data
