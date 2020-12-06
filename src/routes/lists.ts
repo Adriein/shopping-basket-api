@@ -4,6 +4,7 @@ import { IRepository } from '../core/interfaces';
 import {
   CreateListUseCase,
   GetListUseCase,
+  UpdateListProductUseCase,
   UpdateListUseCase,
 } from '../core/usecases';
 import { ListMapper } from '../infrastructure/data/Mappers/ListMapper';
@@ -12,14 +13,20 @@ import { List } from '../core/entities/List';
 import { Product, User } from '../core/entities';
 import { BaseRepository } from '../infrastructure/data/repository';
 import { UserMapper } from '../infrastructure/data/Mappers/UserMapper';
-import { CreateListRequest } from '../core/request';
+import { CreateListRequest, UpdateListProductRequest } from '../core/request';
 import { UpdateListRequest } from '../core/request/UpdateListRequest';
+import { ProductToListMapper } from '../infrastructure/data/Mappers/ProductToListMapper';
 
 const router: Router = express.Router();
 
 const listRepository: IRepository<List> = new ListRepository(
   'List',
   new ListMapper()
+);
+
+const productRepository: IRepository<Product> = new BaseRepository(
+  'Product',
+  new ProductToListMapper()
 );
 
 const usersRepository: IRepository<User> = new BaseRepository(
@@ -120,9 +127,32 @@ router.put(
             )
         ),
       };
-      res
-        .status(200)
-        .send((await updateListUseCase.execute(request)).data);
+      res.status(200).send((await updateListUseCase.execute(request)).data);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.put(
+  '/list/:listId/product/:productId',
+  requireAuth,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const updateListUseCase = new UpdateListProductUseCase(productRepository);
+      const request: UpdateListProductRequest = {
+        product: new Product(
+          req.params.productId,
+          req.body.name,
+          req.body.img,
+          req.body.supermarket,
+          req.body.status,
+          req.body.user,
+          req.body.quantity,
+          req.params.listId
+        ),
+      };
+      res.status(200).send((await updateListUseCase.execute(request)).data);
     } catch (error) {
       next(error);
     }

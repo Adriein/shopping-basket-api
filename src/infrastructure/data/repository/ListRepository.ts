@@ -27,7 +27,7 @@ export class ListRepository extends BaseRepository<List> {
         })
       );
     }
-    return this.mapper.toDomainEntity(lists);
+    return this.mapper.toDomainEntity(lists) as List[];
   }
 
   async save(list: List): Promise<List> {

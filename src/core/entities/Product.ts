@@ -41,6 +41,10 @@ export class Product {
     return this.quantity!;
   }
 
+  getListId(): string | undefined {
+    return this.listId;
+  }
+
   public static create(
     name: string,
     img: string,

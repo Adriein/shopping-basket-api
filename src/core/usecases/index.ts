@@ -6,3 +6,4 @@ export * from './followers/GetFollowersUseCase';
 export * from './lists/CreateListUseCase';
 export * from './lists/GetListUseCase';
 export * from './lists/UpdateListUseCase';
+export * from './lists/UpdateListProductUseCase';
