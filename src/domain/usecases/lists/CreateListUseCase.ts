@@ -2,7 +2,7 @@ import { List, User, ShoppingBasketResponse } from '../../entities';
 import { IUseCase, IRepository } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
 import { ListEnum } from '../../enums/ListEnum';
-import { CreateListRequest } from '../../request';
+import { CreateListRequest } from '../../commands';
 
 export class CreateListUseCase implements IUseCase<string> {
   constructor(

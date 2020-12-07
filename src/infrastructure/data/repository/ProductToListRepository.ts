@@ -1,4 +1,4 @@
-import { Product } from '../../../core/entities';
+import { Product } from '../../../domain/entities';
 import { BaseRepository } from './BaseRepository';
 
 export class ProductToListRepository extends BaseRepository<Product> {

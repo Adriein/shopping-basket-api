@@ -1,5 +1,5 @@
-import { User } from '../../../core/entities';
-import { IMapper } from '../../../core/interfaces';
+import { User } from '../../../domain/entities';
+import { IMapper } from '../../../domain/interfaces';
 import { User as UserDto } from '../DTO/User.dto';
 
 export class UserMapper implements IMapper<User> {

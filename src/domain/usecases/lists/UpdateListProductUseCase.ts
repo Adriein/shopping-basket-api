@@ -1,7 +1,7 @@
 import { List, Product, ShoppingBasketResponse } from '../../entities';
 import { IUseCase, IRepository } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
-import { UpdateListProductRequest } from '../../request';
+import { UpdateListProductRequest } from '../../commands';
 
 export class UpdateListProductUseCase implements IUseCase<string> {
   constructor(private repository: IRepository<Product>) {}

@@ -1,8 +1,8 @@
-import { IMapper } from '../../../core/interfaces';
+import { IMapper } from '../../../domain/interfaces';
 import { List as ListDto } from '../DTO/List.dto';
 import { User as UserDto } from '../DTO/User.dto';
-import { ListEnum } from '../../../core/enums/ListEnum';
-import { List, Product, User } from '../../../core/entities';
+import { ListEnum } from '../../../domain/enums/ListEnum';
+import { List, Product, User } from '../../../domain/entities';
 
 export class ListMapper implements IMapper<List> {
   public toDomainEntity(list: ListDto[]): List[] {

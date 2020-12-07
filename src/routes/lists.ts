@@ -1,20 +1,20 @@
 import { currentUser, requireAuth } from './middlewares/auth';
 import express, { Router, Request, Response, NextFunction } from 'express';
-import { IRepository } from '../core/interfaces';
+import { IRepository } from '../domain/interfaces';
 import {
   CreateListUseCase,
   GetListUseCase,
   UpdateListProductUseCase,
   UpdateListUseCase,
-} from '../core/usecases';
+} from '../domain/usecases';
 import { ListMapper } from '../infrastructure/data/Mappers/ListMapper';
 import { ListRepository } from '../infrastructure/data/repository/ListRepository';
-import { List } from '../core/entities/List';
-import { Product, User } from '../core/entities';
+import { List } from '../domain/entities/List';
+import { Product, User } from '../domain/entities';
 import { BaseRepository } from '../infrastructure/data/repository';
 import { UserMapper } from '../infrastructure/data/Mappers/UserMapper';
-import { CreateListRequest, UpdateListProductRequest } from '../core/request';
-import { UpdateListRequest } from '../core/request/UpdateListRequest';
+import { CreateListRequest, UpdateListProductRequest } from '../domain/commands';
+import { UpdateListRequest } from '../domain/commands/UpdateListRequest';
 import { ProductToListMapper } from '../infrastructure/data/Mappers/ProductToListMapper';
 
 const router: Router = express.Router();

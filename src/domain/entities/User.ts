@@ -1,4 +1,4 @@
-import { generateShortId, generateUuid, hash } from '../helpers';
+import { generateShortId, generateUuid, hash, compare } from '../helpers';
 
 export class User {
   private id: string;
@@ -64,5 +64,12 @@ export class User {
 
   public async hashPassword(): Promise<void> {
     this.password = await hash(this.password);
+  }
+
+  public async isCorrectPassword(
+    storedPassword: string,
+    suppliedPassword: string
+  ): Promise<boolean> {
+    return await compare(storedPassword, suppliedPassword);
   }
 }

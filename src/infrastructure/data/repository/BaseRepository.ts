@@ -1,4 +1,4 @@
-import { IRepository, IMapper } from '../../../core/interfaces';
+import { IRepository, IMapper } from '../../../domain/interfaces';
 import { getConnection } from 'typeorm';
 
 export class BaseRepository<T> implements IRepository<T> {
@@ -11,7 +11,7 @@ export class BaseRepository<T> implements IRepository<T> {
 
     return domainEntity;
   }
-  async findMany(searchObj: any): Promise<T[]> {
+  async find(searchObj: any): Promise<T[]> {
     const entities = await this.database.find(this.entity, searchObj);
     return this.mapper.toDomainEntity(entities) as T[];
   }

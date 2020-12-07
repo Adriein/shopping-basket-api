@@ -1,10 +1,10 @@
 import { BaseRepository } from '../infrastructure/data/repository';
 import { currentUser, requireAuth } from './middlewares/auth';
 import express, { Router, Request, Response, NextFunction } from 'express';
-import { IRepository } from '../core/interfaces';
+import { IRepository } from '../domain/interfaces';
 import { UserMapper } from '../infrastructure/data/Mappers/UserMapper';
-import { FollowUseCase, GetFollowersUseCase } from '../core/usecases';
-import { User } from '../core/entities';
+import { FollowUseCase, GetFollowersUseCase } from '../domain/usecases';
+import { User } from '../domain/entities';
 
 const router: Router = express.Router();
 

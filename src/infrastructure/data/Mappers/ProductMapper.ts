@@ -1,5 +1,5 @@
-import { Product } from '../../../core/entities';
-import { IMapper } from '../../../core/interfaces';
+import { Product } from '../../../domain/entities';
+import { IMapper } from '../../../domain/interfaces';
 import { Product as ProductDto } from '../DTO/Product.dto';
 
 export class ProductMapper implements IMapper<Product> {

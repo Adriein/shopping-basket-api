@@ -1,11 +1,11 @@
 import { BaseRepository } from '../infrastructure/data/repository';
 import { requireAuth } from './middlewares/auth';
 import express, { Router, Request, Response, NextFunction } from 'express';
-import { IRepository, IScrapper } from '../core/interfaces';
-import { PopulateDatabaseUseCase } from '../core/usecases';
+import { IRepository, IScrapper } from '../domain/interfaces';
+import { PopulateDatabaseUseCase } from '../domain/usecases';
 import { Scrapper } from '../infrastructure/scrapper/Scrapper';
 import { ProductMapper } from '../infrastructure/data/Mappers/ProductMapper';
-import { Product } from '../core/entities';
+import { Product } from '../domain/entities';
 
 const router: Router = express.Router();
 const productRepository: IRepository<Product> = new BaseRepository<Product>(

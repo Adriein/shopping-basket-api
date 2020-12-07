@@ -1,8 +1,8 @@
-import { Product } from '../../../core/entities';
-import { IMapper } from '../../../core/interfaces';
+import { Product } from '../../../domain/entities';
+import { IMapper } from '../../../domain/interfaces';
 import { ProductToList as ProductToListDto } from '../DTO/ProductToList.dto';
 import { Product as ProductDto } from '../DTO/Product.dto';
-import { ProductEnum } from '../../../core/enums/ProductEnum';
+import { ProductEnum } from '../../../domain/enums/ProductEnum';
 
 export class ProductToListMapper implements IMapper<Product> {
   public toDomainEntity(productToListDto: ProductToListDto): Product {

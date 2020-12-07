@@ -1,6 +1,6 @@
-import { List, Product } from '../../../core/entities';
-import { ProductEnum } from '../../../core/enums/ProductEnum';
-import { IMapper } from '../../../core/interfaces';
+import { List, Product } from '../../../domain/entities';
+import { ProductEnum } from '../../../domain/enums/ProductEnum';
+import { IMapper } from '../../../domain/interfaces';
 import { List as ListDTO } from '../DTO/List.dto';
 import { Product as ProductDTO } from '../DTO/Product.dto';
 import { ProductToList } from '../DTO/ProductToList.dto';
@@ -11,7 +11,7 @@ export class ListRepository extends BaseRepository<List> {
     super(entity, mapper);
   }
 
-  async findMany(searchObj: any): Promise<List[]> {
+  async find(searchObj: any): Promise<List[]> {
     const lists: ListDTO[] = await this.database.find(this.entity, searchObj);
     for (let list of lists) {
       list.products = await Promise.all(

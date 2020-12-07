@@ -1,5 +1,5 @@
-export * from './auth/RegisterUseCase';
-export * from './auth/SignInUseCase';
+export * from '../../application/auth/RegisterUserHandler';
+export * from '../../application/auth/SigninHandler';
 export * from './crons/PopulateDatabaseUseCase';
 export * from './followers/FollowUseCase';
 export * from './followers/GetFollowersUseCase';

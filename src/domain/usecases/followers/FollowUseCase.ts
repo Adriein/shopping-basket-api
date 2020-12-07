@@ -1,7 +1,7 @@
 import { ShoppingBasketResponse, User } from '../../entities';
 import { IUseCase, IRepository } from '../../interfaces';
 import { CustomError, UnExpectedError } from '../../errors';
-import { FollowRequest } from '../../request';
+import { FollowRequest } from '../../commands';
 
 export class FollowUseCase implements IUseCase<string> {
   constructor(private userRepository: IRepository<User>) {}
